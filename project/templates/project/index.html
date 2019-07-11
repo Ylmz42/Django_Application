@@ -1,0 +1,13 @@
+{% extends 'project/base.html' %}
+
+{% block body %}
+{% if all_projects %}
+<ul>
+  {% for project in all_projects %}
+  <li><a href="{% url 'project:detail' project.id %}">{{project.project_name}}</a></li>
+  {% endfor %}
+</ul>
+{% else %}
+  <h3>You don't have any projects</h3>
+{% endif %}
+{% endblock %}
