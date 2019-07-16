@@ -3,12 +3,24 @@ from django.contrib.auth import logout
 from django.shortcuts import render, get_object_or_404
 from .forms import UserForm
 from .models import Project
+from .models import Application
 
 # Create your views here.
 
 def index(request):
-    all_projects = Project.objects.all()
-    return render(request, 'project/index.html', {'all_projects': all_projects})
+    apps = Application.objects.all()
+    my_dict = []
+    kontrol=0
+    for obj in apps:
+        ekle=obj.project.project_name
+        for varmi in my_dict:
+            if ekle == varmi:
+                kontrol=1
+                break
+        if kontrol == 0:
+            my_dict.append(ekle)
+        kontrol=0
+    return render(request, 'project/index.html',{'apps':apps, 'my_dict':my_dict})
 
 
 def register(request):

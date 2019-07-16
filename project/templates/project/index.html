@@ -1,13 +1,67 @@
 {% extends 'project/base.html' %}
-
 {% block body %}
-{% if all_projects %}
-<ul>
-  {% for project in all_projects %}
-  <li><a href="{% url 'project:detail' project.id %}">{{project.project_name}}</a></li>
-  {% endfor %}
-</ul>
-{% else %}
-  <h3>You don't have any projects</h3>
-{% endif %}
+<style media="screen">
+  table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 10px;
+  }
+
+  tr:nth-child(even) {
+    background-color: #dddddd;
+  }
+  .container
+  {
+    width: 90%;
+  }
+  .left-edit
+  {
+    width: 10%;
+  }
+  .panel-heading
+  {
+
+  }
+</style>
+{% for a in my_dict %}
+<div class="container">
+  <div class="panel panel-success">
+    <div class="panel-heading"><h3><a data-toggle="collapse" href="#{{a}}">{{a}}</a></h3></div>
+    <div id="{{a}}" class="panel-collapse collapse">
+    <div class="panel-body">
+
+        <table>
+          <tr>
+            <th width="15%">Project Name</th>
+            <th width="10%">Project Status</th>
+            <th width="10%">Application Name</th>
+            <th width="20%">Application Access</th>
+            <th width="35%">Application Notes</th>
+            <th width="10%">Finish</th>
+          </tr>
+          {% for b in apps %}
+            {% if b.project.project_name == a %}
+              <tr>
+                <td>{{a}}</td>
+                <td>{{b.project.project_situation}}</td>
+                <td>{{b.application_name}}</td>
+                <td>{{b.application_access}}</td>
+                <td>{{b.application_notes}}</td>
+                <td><span class="glyphicon glyphicon-unchecked"></span>OK</td>
+              </tr>
+            {% endif %}
+          {% endfor %}
+        </table>
+    </div>
+    </div>
+  </div>
+</div>
+
+{% endfor %}
 {% endblock %}
