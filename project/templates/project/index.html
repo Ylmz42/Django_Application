@@ -34,7 +34,7 @@
   <div class="panel panel-success">
     <div class="panel-heading"><h3><a data-toggle="collapse" href="#{{a}}">{{a}}</a></h3></div>
     <div id="{{a}}" class="panel-collapse collapse">
-    <div class="panel-body">
+      <div class="panel-body">
 
         <table>
           <tr>
@@ -46,19 +46,19 @@
             <th width="10%">Finish</th>
           </tr>
           {% for b in apps %}
-            {% if b.project.project_name == a %}
-              <tr>
-                <td>{{a}}</td>
-                <td>{{b.project.project_situation}}</td>
-                <td>{{b.application_name}}</td>
-                <td>{{b.application_access}}</td>
-                <td>{{b.application_notes}}</td>
-                <td><span class="glyphicon glyphicon-unchecked"></span>OK</td>
-              </tr>
-            {% endif %}
+          {% if b.project.project_name == a %}
+          <tr>
+            <td>{{a}}</td>
+            <td>{{b.project.project_situation}}</td>
+            <td>{{b.application_name}}</td>
+            <td>{{b.application_access}}</td>
+            <td>{{b.application_notes}}</td>
+            <td><span class="glyphicon glyphicon-unchecked"></span>OK</td>
+          </tr>
+          {% endif %}
           {% endfor %}
         </table>
-    </div>
+      </div>
     </div>
   </div>
 </div>
