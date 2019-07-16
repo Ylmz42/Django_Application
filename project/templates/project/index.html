@@ -18,11 +18,7 @@
   }
   .container
   {
-    width: 90%;
-  }
-  .left-edit
-  {
-    width: 10%;
+    width: 95%;
   }
   .panel-heading
   {
@@ -48,7 +44,7 @@
           {% for b in apps %}
           {% if b.project.project_name == a %}
           <tr>
-            <td>{{a}}</td>
+            <td><a href="/{{b.project.pk}}">{{a}}</a></td>
             <td>{{b.project.project_situation}}</td>
             <td>{{b.application_name}}</td>
             <td>{{b.application_access}}</td>

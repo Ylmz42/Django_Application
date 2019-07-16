@@ -10,16 +10,16 @@ from .models import Application
 def index(request):
     apps = Application.objects.all()
     my_dict = []
-    kontrol=0
+    control=0
     for obj in apps:
-        ekle=obj.project.project_name
-        for varmi in my_dict:
-            if ekle == varmi:
-                kontrol=1
+        add=obj.project.project_name
+        for x in my_dict:
+            if add == x:
+                control=1
                 break
-        if kontrol == 0:
-            my_dict.append(ekle)
-        kontrol=0
+        if control == 0:
+            my_dict.append(add)
+        control=0
     return render(request, 'project/index.html',{'apps':apps, 'my_dict':my_dict})
 
 
@@ -68,5 +68,5 @@ def logout_user(request):
 
 def detail(request, project_id):
     # try/Except statement
-    project = get_object_or_404(Project, pk=project_id)
-    return render(request, 'project/detail.html',  {'project': project})
+    project = get_object_or_404(Project.objects.all(), pk=project_id)
+    return render(request, 'project/project_detail.html',  {'project': project})
