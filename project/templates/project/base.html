@@ -41,6 +41,7 @@
           {% if user.is_authenticated %}
             <li><a href="http://127.0.0.1:8000/logout_user/"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
           {% else %}
+            <li class="{% block register_active %}{% endblock %}"><a href="{% url 'project:register' %}"><span class="glyphicon glyphicon-user"></span> Register</a></li>
             <li><a href="http://127.0.0.1:8000/login_user/"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
           {% endif %}
         </ul>
