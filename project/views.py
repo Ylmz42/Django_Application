@@ -68,3 +68,15 @@ def detail(request, project_id):
     # try/Except statement
     project = get_object_or_404(Project.objects.all(), pk=project_id)
     return render(request, 'project/project_detail.html',  {'project': project})
+
+def create_project(request):
+    return
+
+def delete_project(request):
+    return
+
+def create_application(request):
+    return
+
+def delete_application(request):
+    return
