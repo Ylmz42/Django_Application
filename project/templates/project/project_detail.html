@@ -1,10 +1,11 @@
 {% extends 'project/base.html' %}
 
 {% block body %}
-<div class="container" style="width: 95%">
-  <div class="panel panel-default" style="margin: 50px;">
-    <div class="panel-heading">
-      <h3>{{project.project_name}}<h3>
+{% if user.is_authenticated%}
+  <div class="container" style="width: 95%">
+    <div class="panel panel-default" style="margin: 50px;">
+      <div class="panel-heading">
+        <h3>{{project.project_name}}<h3>
       </div>
       <div class="panel-body">
         <a href="#" class="btn btn-warning " style="background-color: orange; border: none; margin: 10px 0px 10px 20px">
@@ -32,7 +33,7 @@
               <td>1</td>
               <td>{{project.project_name}}</td>
               <td>{{project.project_situation}}</td>
-              <td>35</td>
+              <td>{{project}}</td>
               <td>New York</td>
               <td>USA</td>
             </tr>
@@ -49,4 +50,7 @@
       </div>
     </div>
   </div>
+{% else %}
+  <p>He Tek Akıllı Sensin</p>
+{% endif %}
 {% endblock %}

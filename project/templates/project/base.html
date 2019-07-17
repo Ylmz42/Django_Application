@@ -38,7 +38,11 @@
           </div>
         </form>
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+          {% if user.is_authenticated %}
+            <li><a href="http://127.0.0.1:8000/logout_user/"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+          {% else %}
+            <li><a href="http://127.0.0.1:8000/login_user/"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+          {% endif %}
         </ul>
       </div>
     </div>
