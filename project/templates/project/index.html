@@ -33,7 +33,7 @@
       <div class="panel-heading"><h3><a data-toggle="collapse" href="#{{a}}">{{a}}</a></h3></div>
       <div id="{{a}}" class="panel-collapse collapse">
         <div class="panel-body">
-
+          {% if user.id == project.user_id %}
           <table>
             <tr>
               <th width="15%">Project Name</th>
@@ -56,6 +56,9 @@
               {% endif %}
             {% endfor %}
           </table>
+          {% else %}
+          {% endif %}
+          <h3> You don't have any project!</h3>
         </div>
       </div>
     </div>
