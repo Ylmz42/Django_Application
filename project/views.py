@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.shortcuts import render, get_object_or_404
-from .forms import UserForm
+from .forms import UserForm, ApplicationForm, ProjectForm
 from .models import Project
 from .models import Application
 
@@ -70,13 +70,27 @@ def detail(request, project_id):
     return render(request, 'project/project_detail.html',  {'project': project})
 
 def create_project(request):
-    return
+    form = ProjectForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+
+    context={
+        'form': form,
+    }
+    return render(request, 'project/create_project.html', context)
 
 def delete_project(request):
     return
 
 def create_application(request):
-    return
+    form = ApplicationForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+
+    context={
+        'form': form,
+    }
+    return render(request, 'project/create_application.html', context)
 
 def delete_application(request):
     return

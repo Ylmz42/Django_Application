@@ -10,4 +10,6 @@ urlpatterns = [
     url(r'^login_user/$', views.login_user, name='login_user'),
     url(r'^logout_user/$', views.logout_user, name='logout_user'),
     url(r'^(?P<project_id>[0-9]+)/$', views.detail, name='detail'),
+    url(r'^create_project/$', views.create_project, name='create_project'),
+    url(r'^create_application/$', views.create_application, name='create_application'),
 ]
