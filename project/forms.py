@@ -2,14 +2,14 @@ from django import forms
 from django.contrib.auth.models import User
 from .models import Project, Application
 
-class UserForm(forms.ModelForm):
+class UserForm(forms.ModelForm):#Register form
     password = forms.CharField(widget=forms.PasswordInput)
 
     class Meta:
         model = User
         fields = ['username','first_name','last_name', 'email', 'password']
 
-class ProjectForm(forms.ModelForm):
+class ProjectForm(forms.ModelForm):#Create project form
 
     class Meta:
         model = Project
@@ -19,7 +19,7 @@ class ProjectForm(forms.ModelForm):
             'project_situation',
         ]
 
-class ApplicationForm(forms.ModelForm):
+class ApplicationForm(forms.ModelForm):#Create application form
 
     class Meta:
         model = Application

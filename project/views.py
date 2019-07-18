@@ -7,7 +7,7 @@ from .models import Application
 
 # Create your views here.
 
-def index(request):
+def index(request):#Returns all applications and project names.
     apps = Application.objects.all()
     my_dict = []
     control=0
@@ -18,7 +18,7 @@ def index(request):
                 control=1
                 break
         if control == 0:
-            my_dict.append(add)
+            my_dict.append(add)#Add project names in the list my_dict
         control=0
     return render(request, 'project/index.html',{'apps':apps, 'my_dict':my_dict})
 
@@ -69,12 +69,12 @@ def logout_user(request):
 
 def detail(request, project_id):
     # try/Except statement
-    project = get_object_or_404(Project.objects.all(), pk=project_id)
+    project = get_object_or_404(Project.objects.all(), pk=project_id)#Returns project object if it is exist. If ıt's not returns 404 page.
     return render(request, 'project/project_detail.html',  {'project': project})
 
 def create_project(request):
     form = ProjectForm(request.POST or None)
-    if form.is_valid():
+    if form.is_valid():#Is the form filled completly.
         form.save()
 
     context={
@@ -87,7 +87,7 @@ def delete_project(request):
 
 def create_application(request):
     form = ApplicationForm(request.POST or None)
-    if form.is_valid():
+    if form.is_valid():#Is the form filled completly.
         form.save()
 
     context={

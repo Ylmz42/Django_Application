@@ -1,5 +1,5 @@
 {% extends 'project/base.html' %}
-{% block title %}Create New Application{% endblock %}
+{% block title %}Create New Project{% endblock %}
 {% block projects_active %}active{% endblock %}
 
 {% block body %}
@@ -8,34 +8,17 @@
 
   <div class="row">
 
-    <!-- Left Album Info -->
-    <div class="col-sm-4 col-md-3">
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <h1>{{ project.project_name }}</h1>
-          <h2>{{ project.project_situation }}</h2>
-        </div>
-      </div>
-    </div>
-
-    <!-- Right Song Info -->
-    <div class="col-sm-8 col-md-9">
-
-      <ul class="nav nav-pills" style="margin-bottom: 10px;">
-        <li role="presentation"><a href="{% url 'project:detail' project.id %}">View All</a></li>
-        <li role="presentation" class="active"><a href="{% url 'project:create_application' project.id %}">Create New Application</a></li>
-      </ul>
-
+    <div class="col-sm-12 col-md-7">
       <div class="panel panel-default">
         <div class="panel-body">
           <h3>Create New Project</h3>
           {% if error_message %}
-          <p><strong>{{ error_message }}</strong></p>
+          <p><strong> {{error_message}}</strong></p>
           {% endif %}
           <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <input type="hidden" name="album" value="{{ album }}">
             {% include 'project/form_template.html' %}
+
             <div class="form-group">
               <div class="col-sm-offset-2 col-sm-10">
                 <button type="submit" class="btn btn-success">Submit</button>
@@ -44,11 +27,6 @@
           </form>
         </div>
       </div>
-
     </div>
-
-  </div>
-
-</div>
 
 {% endblock %}
