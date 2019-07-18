@@ -42,19 +42,22 @@ def register(request):
     return render(request, 'project/register.html', context)
 
 def login_user(request):
-    if request.method == "POST":
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                return index(request)
+    if request.user.is_authenticated:
+        return index(request)
+    else:
+        if request.method == "POST":
+            username = request.POST['username']
+            password = request.POST['password']
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    return index(request)
+                else:
+                    return render(request, 'project/login.html')#, {'error_message': 'Your account has been disabled'})
             else:
-                return render(request, 'project/login.html')#, {'error_message': 'Your account has been disabled'})
-        else:
-            return render(request, 'project/login.html')#, {'error_message': 'Invalid login'})
-    return render(request, 'project/login.html')
+                return render(request, 'project/login.html')#, {'error_message': 'Invalid login'})
+        return render(request, 'project/login.html')
 
 def logout_user(request):
     logout(request)
