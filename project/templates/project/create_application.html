@@ -1,15 +1,32 @@
-<!DOCTYPE html>
+{% extends 'project/base.html' %}
+{% block title %}Create New Application{% endblock %}
+{% block projects_active %}active{% endblock %}
 
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Create Application</title>
-  </head>
-  <body>
-    <form method="post">
-      {% csrf_token %}
-      {{form.as_p}}
-      <input type="submit" name="submit" value="Submit">
-    </form>
-  </body>
-</html>
+{% block body %}
+
+<div class="container-fluid">
+
+  <div class="row">
+
+    <div class="col-sm-12 col-md-7">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <h3>Create New Application</h3>
+          {% if error_message %}
+          <p><strong> {{error_message}}</strong></p>
+          {% endif %}
+          <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% include 'project/form_template.html' %}
+
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-success">Submit</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}

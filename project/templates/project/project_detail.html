@@ -2,10 +2,10 @@
 
 {% block body %}
 {% if user.is_authenticated%}
-  <div class="container" style="width: 95%">
-    <div class="panel panel-default" style="margin: 50px;">
-      <div class="panel-heading">
-        <h3>{{project.project_name}}<h3>
+<div class="container" style="width: 95%">
+  <div class="panel panel-default" style="margin: 50px;">
+    <div class="panel-heading">
+      <h3>{{project.project_name}}<h3>
       </div>
       <div class="panel-body">
         <a href="#" class="btn btn-warning " style="background-color: orange; border: none; margin: 10px 0px 10px 20px">
@@ -50,7 +50,7 @@
       </div>
     </div>
   </div>
-{% else %}
+  {% else %}
   <p>He Tek Akıllı Sensin</p>
-{% endif %}
-{% endblock %}
+  {% endif %}
+  {% endblock %}
