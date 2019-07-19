@@ -39,6 +39,9 @@
             </tr>
           </tbody>
         </table>
+        {% for a in project%}
+          <p>{{a.id}}</p>
+        {% endfor %}
         <div id="coll">
           <p>{{project.project_name}}</p>
         </div>

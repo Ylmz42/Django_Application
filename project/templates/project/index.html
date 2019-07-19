@@ -30,8 +30,8 @@
 {% for a in my_dict %}
   <div class="container">
     <div class="panel panel-success">
-      <div class="panel-heading"><h3><a data-toggle="collapse" href="#{{a}}">{{a}}</a></h3></div>
-      <div id="{{a}}" class="panel-collapse collapse">
+      <div class="panel-heading"><h3><a data-toggle="collapse" href="#{{a.project_name}}">{{a.project_name}}</a></h3></div>
+      <div id="{{a.project_name}}" class="panel-collapse collapse">
         <div class="panel-body">
           <table>
             <tr>
@@ -43,7 +43,7 @@
               <th width="10%">Finish</th>
             </tr>
             {% for b in apps %}
-              {% if b.project.project_name == a and user.username == b.project.user.username %}
+              {% if b.project.id == a.id and request.user == b.project.user %}
                 <tr>
                   <td><a href="/{{b.project.pk}}">{{a}}</a></td>
                   <td>{{b.project.project_situation}}</td>

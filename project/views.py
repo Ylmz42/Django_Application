@@ -9,17 +9,7 @@ from .models import Application
 
 def index(request):#Returns all applications and project names.
     apps = Application.objects.all()
-    my_dict = []
-    control=0
-    for obj in apps:
-        add=obj.project.project_name
-        for x in my_dict:
-            if add == x:
-                control=1
-                break
-        if control == 0:
-            my_dict.append(add)#Add project names in the list my_dict
-        control=0
+    my_dict = Project.objects.all()
     return render(request, 'project/index.html',{'apps':apps, 'my_dict':my_dict})
 
 
