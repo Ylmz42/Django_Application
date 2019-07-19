@@ -32,7 +32,7 @@ def register(request):
 
 def login_user(request):
     if request.user.is_authenticated:
-        return render(request, 'project/index.html')
+        return index(request)
     else:
         if request.method == "POST":
             username = request.POST['username']
