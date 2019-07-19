@@ -1,9 +1,8 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.shortcuts import render, get_object_or_404
-from .forms import UserForm, ApplicationForm, ProjectForm
-from .models import Project
-from .models import Application
+from .forms import ProjectForm, ApplicationForm, UserForm
+from .models import Project, Application
 
 # Create your views here.
 
@@ -33,7 +32,7 @@ def register(request):
 
 def login_user(request):
     if request.user.is_authenticated:
-        return index(request)
+        return render(request, 'project/index.html')
     else:
         if request.method == "POST":
             username = request.POST['username']
@@ -44,9 +43,9 @@ def login_user(request):
                     login(request, user)
                     return index(request)
                 else:
-                    return render(request, 'project/login.html')#, {'error_message': 'Your account has been disabled'})
+                    return render(request, 'project/login.html', {'error_message': 'Your account has been disabled'})
             else:
-                return render(request, 'project/login.html')#, {'error_message': 'Invalid login'})
+                return render(request, 'project/login.html', {'error_message': 'Invalid login'})
         return render(request, 'project/login.html')
 
 def logout_user(request):
@@ -58,32 +57,63 @@ def logout_user(request):
     return render(request, 'project/login.html', context)
 
 def detail(request, project_id):
-    # try/Except statement
-    project = get_object_or_404(Project.objects.all(), pk=project_id)#Returns project object if it is exist. If ıt's not returns 404 page.
-    return render(request, 'project/project_detail.html',  {'project': project})
+    if not request.user.is_authenticated:
+        return render(request, 'project/login.html')
+    else:
+        user = request.user
+        project = get_object_or_404(Project, pk=project_id)
+        return render(request, 'project/detail.html', {'project': project, 'user': user})
+    # project = get_object_or_404(Project.objects.all(), pk=project_id)#Returns project object if it is exist. If ıt's not returns 404 page.
+    # return render(request, 'project/detail.html',  {'project': project})
 
 def create_project(request):
-    form = ProjectForm(request.POST or None)
-    if form.is_valid():#Is the form filled completly.
-        form.save()
+    if not request.user.is_authenticated:
+        return render(request, 'project/login.html')
+    else:
+        form = ProjectForm(request.POST or None)
+        if form.is_valid():
+            project = form.save(commit=False)
+            project.user = request.user
 
-    context={
-        'form': form,
-    }
+            project.save()
+            return render(request, 'project/detail.html', {'project': project})
+        context = {
+            "form": form,
+        }
     return render(request, 'project/create_project.html', context)
 
-def delete_project(request):
-    return
+def delete_project(request, project_id):
+    project = Project.objects.get(pk=project_id)
+    project.delete()
+    projects = Project.objects.filter(user=request.user)
+    return render(request, 'project/index.html', {'projects': projects})
 
-def create_application(request):
+def create_application(request, project_id):
     form = ApplicationForm(request.POST or None)
-    if form.is_valid():#Is the form filled completly.
-        form.save()
+    project = get_object_or_404(Project, pk=project_id)
+    if form.is_valid():
+        projects_applications = project.song_set.all()
+        for a in projects_applications:
+            if projects_applications.application_name == form.cleaned_data.get("application_name"):
+                context = {
+                    'project': project,
+                    'form': form,
+                    'error_message': 'You already added that application',
+                }
+                return render(request, 'project/create_application.html', context)
+        application = form.save(commit=False)
+        application.project = project
 
-    context={
+        application.save()
+        return render(request, 'project/detail.html', {'project': project})
+    context = {
+        'project': project,
         'form': form,
     }
     return render(request, 'project/create_application.html', context)
 
-def delete_application(request):
-    return
+def delete_application(request, project_id, application_id):
+    project = get_object_or_404(Project, pk=project_id)
+    application = Application.objects.get(pk=application_id)
+    application.delete()
+    return render(request, 'project/detail.html', {'project': project})

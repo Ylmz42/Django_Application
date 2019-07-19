@@ -1,7 +1,57 @@
 {% extends 'project/base.html' %}
 
 {% block body %}
-
-{{ project }}
-
-{% endblock %}
+{% if user.is_authenticated%}
+<div class="container" style="width: 95%">
+  <div class="panel panel-default" style="margin: 50px;">
+    <div class="panel-heading">
+      <h3>{{project.project_name}}<h3>
+      </div>
+      <div class="panel-body">
+        <a href="#" class="btn btn-warning " style="background-color: orange; border: none; margin: 10px 0px 10px 20px">
+          <span class="glyphicon glyphicon-edit" style="background-color: orange"></span> Edit
+        </a>
+        <a href="#" class="btn btn-danger " style="background-color: red; border: none;">
+          <span class="glyphicon glyphicon-remove-sign" style="background-color: red"></span> Remove
+        </a>
+        <a href="#coll" class="btn btn-info" data-toggle="collapse" style="background-color:#1996ff; border: none; float:right; margin: 10px 20px 10px 0px">
+          <span class="glyphicon glyphicon-info-sign" style="background-color:#1996ff"></span> Info
+        </a>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Firstname</th>
+              <th>Lastname</th>
+              <th>Age</th>
+              <th>City</th>
+              <th>Country</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>{{project.project_name}}</td>
+              <td>{{project.project_situation}}</td>
+              <td>{{project}}</td>
+              <td>New York</td>
+              <td>USA</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>{{a.id}}</p>
+        <div id="coll">
+          <p>{{project.project_name}}</p>
+        </div>
+        <div style = "margin: 30px 0px 10px 30px">
+          <a href="{% url 'project:create_application' project.id %}" class="btn btn-success btn-lg" style="border:none">
+            <span class="glyphicon glyphicon-plus-sign"></span> Create New Application
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <p>He Tek Akıllı Sensin</p>
+  {% endif %}
+  {% endblock %}
