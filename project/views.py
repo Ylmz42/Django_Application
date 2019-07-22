@@ -1,16 +1,36 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.shortcuts import render, get_object_or_404
+from django.db.models import Q
 from .forms import ProjectForm, ApplicationForm, UserForm
 from .models import Project, Application
 
 # Create your views here.
 
-def index(request):#Returns all applications and project names.
-    apps = Application.objects.all()
-    my_dict = Project.objects.all()
-    return render(request, 'project/index.html',{'apps':apps, 'my_dict':my_dict})
-
+def index(request):
+    if not request.user.is_authenticated:
+        return render(request, 'project/login.html')
+    else:
+        projects = Project.objects.filter(user=request.user)
+        applications = Application.objects.all()
+        query = request.GET.get("q")
+        if query:
+            projects = projects.filter(
+                Q(name__icontains=query) 
+            ).distinct()
+            applications = applications.filter(
+                Q(name__icontains=query)
+            ).distinct()
+            return render(request, 'project/index.html',
+            {
+                'projects':projects,
+                'applications':applications
+            })
+        else:
+            return render(request, 'project/index.html', {'projects': projects})
+    #applications = Application.objects.all()
+    #projects = Project.objects.all()
+    #return render(request, 'project/index.html',{'applications':applications, 'projects':projects})
 
 def register(request):
     form = UserForm(request.POST or None)
@@ -63,8 +83,6 @@ def detail(request, project_id):
         user = request.user
         project = get_object_or_404(Project, pk=project_id)
         return render(request, 'project/detail.html', {'project': project, 'user': user})
-    # project = get_object_or_404(Project.objects.all(), pk=project_id)#Returns project object if it is exist. If ıt's not returns 404 page.
-    # return render(request, 'project/detail.html',  {'project': project})
 
 def create_project(request):
     if not request.user.is_authenticated:
