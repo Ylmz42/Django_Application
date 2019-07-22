@@ -73,8 +73,6 @@ def create_project(request):
         form = ProjectForm(request.POST or None)
         if form.is_valid():
             project = form.save(commit=False)
-            project.user = request.user
-
             project.save()
             return render(request, 'project/detail.html', {'project': project})
         context = {
@@ -83,18 +81,17 @@ def create_project(request):
     return render(request, 'project/create_project.html', context)
 
 def delete_project(request, project_id):
-    project = Project.objects.get(pk=project_id)
+    project = get_object_or_404(Project, pk=project_id)
     project.delete()
-    projects = Project.objects.filter(user=request.user)
-    return render(request, 'project/index.html', {'projects': projects})
+    return index(request)
 
 def create_application(request, project_id):
     form = ApplicationForm(request.POST or None)
     project = get_object_or_404(Project, pk=project_id)
     if form.is_valid():
-        projects_applications = project.song_set.all()
+        projects_applications = Application.objects.all()
         for a in projects_applications:
-            if projects_applications.application_name == form.cleaned_data.get("application_name"):
+            if a.application_name == form.cleaned_data.get("application_name"):
                 context = {
                     'project': project,
                     'form': form,

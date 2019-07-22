@@ -4,7 +4,7 @@ from django.db import models
 # Create your models here.
 class Project(models.Model):
 
-    user = models.ManyToManyField(User)
+    user = models.ManyToManyField(User, related_name='users')
     project_name = models.CharField(max_length=250)
     project_situation = models.CharField(max_length=50)
 

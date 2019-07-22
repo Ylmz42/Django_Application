@@ -25,6 +25,35 @@
 
   }
 </style>
+<script>
+  function Delete_Application(a_id)
+  {
+    var confirmation = confirm('Are you sure you want to delete this project.')
+    if(confirmation)
+    {
+
+    }
+  }
+
+  function CheckBox(a_id)
+  {
+    var checkboxes = document.getElementsByName(a_id);
+    if(checkboxes[0].checked)
+    {
+      for(var i = 0; i < checkboxes.length; i++)
+      {
+              checkboxes[i].checked = true;
+      }
+    }
+    else
+    {
+      for(var i = 0; i < checkboxes.length; i++)
+      {
+              checkboxes[i].checked = false;
+      }
+    }
+  }
+</script>
 {% if user.is_authenticated %}
 <p>Hi there {{user.username}}</p>
 {% for a in my_dict %}
@@ -35,7 +64,8 @@
       <div class="panel-body">
         <table>
           <tr>
-            <th width="15%">Project Name</th>
+            <th width="1%"><input type="checkbox" onclick="return CheckBox({{a.id}});" name="{{a.id}}"></th>
+            <th width="14%">Project Name</th>
             <th width="10%">Project Status</th>
             <th width="10%">Application Name</th>
             <th width="20%">Application Access</th>
@@ -43,8 +73,9 @@
             <th width="10%">Finish</th>
           </tr>
           {% for b in apps %}
-          {% if b.project.id == a.id and request.user == b.project.user %}
+          {% if b.project.id == a.id %}
           <tr>
+            <td><input type="checkbox" name="{{a.id}}"></td>
             <td><a href="/{{b.project.pk}}">{{a}}</a></td>
             <td>{{b.project.project_situation}}</td>
             <td>{{b.application_name}}</td>
@@ -55,6 +86,10 @@
           {% endif %}
           {% endfor %}
         </table>
+        <br>
+        <a href="#" class="btn btn-danger " onclick="return Delete_Application({{a.id}})" style="background-color: red; border: none;">
+          <span class="glyphicon glyphicon-remove-sign" style="background-color: red"></span> Remove
+        </a>
       </div>
     </div>
   </div>
