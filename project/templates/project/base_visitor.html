@@ -1,23 +1,26 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+
 <head>
   <meta charset="utf-8">
   <title>{% block title %}Home{% endblock %}</title>
   {% load staticfiles %}
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <link href='https://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" type="text/css" href="{% static 'project/style.css' %}"/>
+  <link rel="stylesheet" type="text/css" href="{% static 'project/style.css' %}" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   <script src="{% static 'project/js/main.js' %}"></script>
 </head>
+
 <body>
   <nav class="navbar navbar-inverse">
     <div class="container-fluid">
 
       <!-- Header -->
       <div class="navbar-header">
-        <a class="navbar-brand" style="text-align:center; width: 150px;" href="{% url 'project:index' %}">Website name</a>
+        <a class="navbar-brand" style="text-align:center; width: 150px;" href="{% url 'project:index' %}">Website
+          name</a>
       </div>
 
       <!-- Items -->
@@ -37,8 +40,10 @@
           </div>
         </form>
         <ul class="nav navbar-nav navbar-right">
-          <li class="{% block register_active %}{% endblock %}"><a href="{% url 'project:register' %}"><span class="glyphicon glyphicon-user"></span> Register</a></li>
-          <li class="{% block login_active %}{% endblock %}"><a href="{% url 'project:login_user' %}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+          <li class="{% block register_active %}{% endblock %}"><a href="{% url 'project:register' %}"><span
+                class="glyphicon glyphicon-user"></span> Register</a></li>
+          <li class="{% block login_active %}{% endblock %}"><a href="{% url 'project:login_user' %}"><span
+                class="glyphicon glyphicon-log-in"></span> Login</a></li>
         </ul>
       </div>
     </div>
@@ -46,4 +51,5 @@
   {% block body %}
   {% endblock %}
 </body>
+
 </html>

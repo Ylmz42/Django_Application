@@ -16,7 +16,7 @@ def index(request):
         query = request.GET.get("q")
         if query:
             projects = projects.filter(
-                Q(name__icontains=query) 
+                Q(name__icontains=query)
             ).distinct()
             applications = applications.filter(
                 Q(name__icontains=query)

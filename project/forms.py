@@ -3,18 +3,19 @@ from django.contrib.auth.models import User
 
 from .models import Project, Application
 
+
 class ProjectForm(forms.ModelForm):
 
     class Meta:
         model = Project
-        fields = ['user','name', 'situation']
+        fields = ['user', 'name', 'situation']
 
 
 class ApplicationForm(forms.ModelForm):
 
     class Meta:
         model = Application
-        fields = ['project','name', 'access', 'username', 'notes']
+        fields = ['project', 'name', 'access', 'username', 'notes']
 
 
 class UserForm(forms.ModelForm):
