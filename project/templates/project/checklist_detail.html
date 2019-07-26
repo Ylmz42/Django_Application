@@ -1,0 +1,54 @@
+{% extends 'project/base.html' %}
+
+{% block body %}
+{% if user.is_authenticated%}
+<div class="container">
+    <form method="POST" action="{% url "project:index" %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <!-- COMPONENT START -->
+        <div class="form-group">
+            <div class="input-group input-file" name="Fichier1">
+                <input type="text" class="form-control" placeholder='Choose a file...' />
+                <span class="input-group-btn">
+                    <button class="btn btn-default btn-choose" type="button">Choose</button>
+                </span>
+            </div>
+        </div>
+        <!-- COMPONENT END -->
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary pull-right">Submit</button>
+            <button type="reset" class="btn btn-danger">Reset</button>
+        </div>
+    </form>
+
+    <div class="panel panel-default" style="margin: 50px;">
+        <div class="panel-heading">
+            <h3>Project's name --> {{applications.name}}<h3>
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive"></div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Vulnerability</th>
+                        <th>Checkbox</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for elem in tbl %}
+                    <tr>
+                        <td>{{elem.0}}</td>
+                        <td><input type="checkbox" id="{{elem.0.id}}" name="check" value="{{elem.1}}"></td>
+                        <td><input type="text"></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button onclick="myFunction()">Submit</button>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

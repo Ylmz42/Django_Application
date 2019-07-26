@@ -3,7 +3,7 @@ from django.contrib.auth import logout
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 from .forms import ProjectForm, ApplicationForm, UserForm
-from .models import Project, Application
+from .models import Project, Application, CheckList
 
 # Create your views here.
 
@@ -76,13 +76,39 @@ def logout_user(request):
     }
     return render(request, 'project/login.html', context)
 
-def detail(request, project_id):
+def project_detail(request, project_id):
     if not request.user.is_authenticated:
         return render(request, 'project/login.html')
     else:
         user = request.user
         project = get_object_or_404(Project, pk=project_id)
-        return render(request, 'project/detail.html', {'project': project, 'user': user})
+        return render(request, 'project/project_detail.html', {'project': project, 'user': user})
+
+def application_detail(request, application_id):
+    application = Application.get_object_or_404(Application, pk=application_id)
+    checklists = CheckList.objects.all()
+
+    checkboxLength = len(list(application.checklist))
+    table = []
+
+    for i in range(checkboxLength):
+        table.append([list(checklists)[i], list(application.checklist)[i]])
+
+    return render(request, 'project/application_detail.html', {'application':application, 'checklists':checklists, 'checkboxLength':checkboxLength,'table':table})
+
+def checklist_detail(request, project_id):
+    applications = Application.objects.all()
+    checklists = CheckList.objects.all()
+
+    applicationLength = len(list(application))
+    table = []
+
+    for i in range(applicationLength):
+        checkboxLength = len(list(applications[i].checklist))
+        for j in range(checkboxLength):
+            table.append([list(checklists)[j], list(applications[i].checklist)[j]])
+        
+    return render(request, 'project/checklist_detail.html', {'applications':applications, 'checklists':checklists, 'table':table})
 
 def create_project(request):
     if not request.user.is_authenticated:
@@ -92,7 +118,7 @@ def create_project(request):
         if form.is_valid():
             project = form.save(commit=False)
             project.save()
-            return render(request, 'project/detail.html', {'project': project})
+            return render(request, 'project/project_detail.html', {'project': project})
         context = {
             "form": form,
         }
@@ -120,7 +146,7 @@ def create_application(request, project_id):
         application.project = project
 
         application.save()
-        return render(request, 'project/detail.html', {'project': project})
+        return render(request, 'project/project_detail.html', {'project': project})
     context = {
         'project': project,
         'form': form,
@@ -131,4 +157,4 @@ def delete_application(request, project_id, application_id):
     project = get_object_or_404(Project, pk=project_id)
     application = Application.objects.get(pk=application_id)
     application.delete()
-    return render(request, 'project/detail.html', {'project': project})
+    return render(request, 'project/project_detail.html', {'project': project})
