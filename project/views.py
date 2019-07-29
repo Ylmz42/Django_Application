@@ -7,6 +7,7 @@ from .models import Project, Application, CheckList
 
 # Create your views here.
 
+
 def index(request):
     if not request.user.is_authenticated:
         return render(request, 'project/login.html')
@@ -22,15 +23,13 @@ def index(request):
                 Q(name__icontains=query)
             ).distinct()
             return render(request, 'project/index.html',
-            {
-                'projects':projects,
-                'applications':applications
-            })
+                          {
+                              'projects': projects,
+                              'applications': applications
+                          })
         else:
-            return render(request, 'project/index.html', {'projects': projects})
-    #applications = Application.objects.all()
-    #projects = Project.objects.all()
-    #return render(request, 'project/index.html',{'applications':applications, 'projects':projects})
+            return render(request, 'project/index.html', {'projects': projects, 'applications': applications})
+
 
 def register(request):
     form = UserForm(request.POST or None)
@@ -44,29 +43,32 @@ def register(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return index(request)
+                projects = Project.objects.filter(user=request.user)
+                applications = Application.objects.all()
+                return render(request, 'project/index.html', {'projects': projects, 'applications': applications})
     context = {
         "form": form,
     }
     return render(request, 'project/register.html', context)
 
+
 def login_user(request):
-    if request.user.is_authenticated:
-        return index(request)
-    else:
-        if request.method == "POST":
-            username = request.POST['username']
-            password = request.POST['password']
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                if user.is_active:
-                    login(request, user)
-                    return index(request)
-                else:
-                    return render(request, 'project/login.html', {'error_message': 'Your account has been disabled'})
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                projects = Project.objects.filter(user=request.user)
+                applications = Application.objects.all()
+                return render(request, 'project/index.html', {'projects': projects, 'applications': applications})
             else:
-                return render(request, 'project/login.html', {'error_message': 'Invalid login'})
-        return render(request, 'project/login.html')
+                return render(request, 'project/login.html', {'error_message': 'Your account has been disabled'})
+        else:
+            return render(request, 'project/login.html', {'error_message': 'Invalid login'})
+    return render(request, 'project/login.html')
+
 
 def logout_user(request):
     logout(request)
@@ -76,39 +78,54 @@ def logout_user(request):
     }
     return render(request, 'project/login.html', context)
 
+
 def project_detail(request, project_id):
     if not request.user.is_authenticated:
         return render(request, 'project/login.html')
     else:
         user = request.user
         project = get_object_or_404(Project, pk=project_id)
-        return render(request, 'project/project_detail.html', {'project': project, 'user': user})
+        applications = Application.objects.all().filter(project_id=project.id)
+        return render(request, 'project/project_detail.html', {'project': project, 'applications': applications, 'user': user})
+
 
 def application_detail(request, application_id):
-    application = Application.get_object_or_404(Application, pk=application_id)
-    checklists = CheckList.objects.all()
+    if not request.user.is_authenticated:
+        return render(request, 'project/login.html')
+    else:
+        user = request.user
+        application = Application.get_object_or_404(
+            Application, pk=application_id)
+        checklists = CheckList.objects.all()
 
-    checkboxLength = len(list(application.checklist))
-    table = []
+        checkboxLength = len(list(application.checklist))
+        table = []
 
-    for i in range(checkboxLength):
-        table.append([list(checklists)[i], list(application.checklist)[i]])
+        for i in range(checkboxLength):
+            table.append([list(checklists)[i], list(application.checklist)[i]])
 
-    return render(request, 'project/application_detail.html', {'application':application, 'checklists':checklists, 'checkboxLength':checkboxLength,'table':table})
+        return render(request, 'project/application_detail.html', {'application': application, 'checklists': checklists, 'checkboxLength': checkboxLength, 'table': table})
+
 
 def checklist_detail(request, project_id):
-    applications = Application.objects.all()
-    checklists = CheckList.objects.all()
+    if not request.user.is_authenticated:
+        return render(request, 'project/login.html')
+    else:
+        user = request.user
+        applications = Application.objects.all()
+        checklists = CheckList.objects.all()
 
-    applicationLength = len(list(application))
-    table = []
+        applicationLength = len(list(application))
+        table = []
 
-    for i in range(applicationLength):
-        checkboxLength = len(list(applications[i].checklist))
-        for j in range(checkboxLength):
-            table.append([list(checklists)[j], list(applications[i].checklist)[j]])
-        
-    return render(request, 'project/checklist_detail.html', {'applications':applications, 'checklists':checklists, 'table':table})
+        for i in range(applicationLength):
+            checkboxLength = len(list(applications[i].checklist))
+            for j in range(checkboxLength):
+                table.append([list(checklists)[j], list(
+                    applications[i].checklist)[j]])
+
+        return render(request, 'project/checklist_detail.html', {'applications': applications, 'checklists': checklists, 'table': table})
+
 
 def create_project(request):
     if not request.user.is_authenticated:
@@ -117,6 +134,7 @@ def create_project(request):
         form = ProjectForm(request.POST or None)
         if form.is_valid():
             project = form.save(commit=False)
+            project.user = request.user
             project.save()
             return render(request, 'project/project_detail.html', {'project': project})
         context = {
@@ -124,34 +142,43 @@ def create_project(request):
         }
     return render(request, 'project/create_project.html', context)
 
+
 def delete_project(request, project_id):
-    project = get_object_or_404(Project, pk=project_id)
-    project.delete()
-    return index(request)
+    if not request.user.is_authenticated:
+        return render(request, 'project/login.html')
+    else:
+        project = get_object_or_404(Project, pk=project_id)
+        project.delete()
+        return render(request, 'project/index.html')
+
 
 def create_application(request, project_id):
-    form = ApplicationForm(request.POST or None)
-    project = get_object_or_404(Project, pk=project_id)
-    if form.is_valid():
-        projects_applications = Application.objects.all()
-        for a in projects_applications:
-            if a.application_name == form.cleaned_data.get("application_name"):
-                context = {
-                    'project': project,
-                    'form': form,
-                    'error_message': 'You already added that application',
-                }
+    if not request.user.is_authenticated:
+        return render(request, 'project/login.html')
+    else:
+        form = ApplicationForm(request.POST or None)
+        project = get_object_or_404(Project, pk=project_id)
+        if form.is_valid():
+            applications = Application.objects.all()
+            for a in projects_applications:
+                if a.application_name == form.cleaned_data.get("application_name"):
+                    context = {
+                        'project': project,
+                        'form': form,
+                        'error_message': 'You already added that application',
+                    }
                 return render(request, 'project/create_application.html', context)
-        application = form.save(commit=False)
-        application.project = project
+            application = form.save(commit=False)
+            application.project = project
 
-        application.save()
-        return render(request, 'project/project_detail.html', {'project': project})
-    context = {
-        'project': project,
-        'form': form,
-    }
-    return render(request, 'project/create_application.html', context)
+            application.save()
+            return render(request, 'project/project_detail.html', {'project': project})
+        context = {
+            'project': project,
+            'form': form,
+        }
+        return render(request, 'project/create_application.html', context)
+
 
 def delete_application(request, project_id, application_id):
     project = get_object_or_404(Project, pk=project_id)
