@@ -42,7 +42,9 @@
                     <tr>
                         <td>{{check}}</td>
                         {% for item in applications %}
-                        <td><input type="checkbox" name="{{item.id}}" value="{{item.check}}">
+                        <td>
+                            <input type="checkbox" name="{{item.id}}" value="{{item.checklist}}"
+                                onchange="update_db({{item.id}}, {{check.id}})"> <!--  value="{{item.check}}" -->
                         </td>
                         {% endfor %}
                     </tr>

@@ -37,6 +37,23 @@ function myFunction(item_id) {
     }
 }
 
+function update_db(item_id, check_id) {
+    var checkBox = document.getElementsByName(item_id);
+    var b = '';
+    var c = ''
+    for (var i = 0; i < checkBox.length; i++) {
+        var value = checkBox[i].value[i];
+        b += value;
+    }
+    if (b.charAt(check_id - 1) == '0') {
+        c = b.substring(0, check_id - 1) + '1' + b.substring(check_id);
+    }
+    else {
+        c = b.substring(0, check_id - 1) + '0' + b.substring(check_id);
+    }
+    location.replace("/update/" + item_id + "/" + c);
+}
+
 $(function () {
     bs_input_file();
 });

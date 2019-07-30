@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 from .forms import ProjectForm, ApplicationForm, UserForm
 from .models import Project, Application, CheckList
-import datetime
+import sqlite3
 # Create your views here.
 
 
@@ -13,8 +13,10 @@ def index(request):
     if not request.user.is_authenticated:
         return render(request, 'project/login.html')
     else:
-        projects = Project.objects.filter(user=request.user)
-        applications = Application.objects.all()
+        #projects = Project.objects.filter(user=request.user)
+        #applications = Application.objects.all()
+        projects = Project.objects.all()
+        applications = Application.usernameInApp(request)
         query = request.GET.get("q")
         if query:
             projects = projects.filter(
@@ -61,7 +63,7 @@ def login_user(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                request.session.set_expiry(5)
+                request.session.set_expiry(300) #5 minutes expire session
                 projects = Project.objects.filter(user=request.user)
                 applications = Application.objects.all()
                 return render(request, 'project/index.html', {'projects': projects, 'applications': applications})
@@ -113,7 +115,6 @@ def checklist_detail(request, project_id):
     if not request.user.is_authenticated:
         return render(request, 'project/login.html')
     else:
-        user = request.user
         project = get_object_or_404(Project, pk=project_id)
         applications = Application.objects.filter(project_id=project.id)
         checklists = CheckList.objects.all()
@@ -188,3 +189,15 @@ def delete_application(request, project_id, application_id):
     application = Application.objects.get(pk=application_id)
     application.delete()
     return render(request, 'project/project_detail.html', {'project': project})
+
+def update(request, p_id, clist):
+    cl = str(clist)
+    conn = sqlite3.connect('db.sqlite3')
+    c = conn.cursor()
+    c.execute("UPDATE project_application SET checklist = ? WHERE id = ?", (cl, p_id))
+    conn.commit()
+    c.close()
+    conn.close()
+    aa = Application.objects.get(pk=p_id)
+    bb = aa.project_id
+    return checklist_detail(request, bb)

@@ -27,6 +27,16 @@ class Application(models.Model):
     def __str__(self):
         return self.name + ' - ' + self.access + ' - ' + self.username + ' - ' + self.notes + ' - ' + self.checklist + ' - ' + self.reported
 
+    def usernameInApp(userRequest):
+        appList = []
+        applications = Application.objects.all()
+        for app in applications:
+            userInApp = (app.username).split(',')
+            for user in userInApp:
+                if user == userRequest.user.username:
+                    appList.append(app)
+        return appList
+
 
 class CheckList(models.Model):
 
