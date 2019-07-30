@@ -1,7 +1,6 @@
 {% extends 'project/base.html' %}
-
+{% block title %}{{application.name}}'s Detail{% endblock %}
 {% block body %}
-{% if user.is_authenticated%}
 <div class="container">
     <form method="POST" action="{% url "project:index" %}" enctype="multipart/form-data">
         {% csrf_token %}
@@ -23,7 +22,7 @@
 
     <div class="panel panel-default" style="margin: 50px;">
         <div class="panel-heading">
-            <h3>Project's name --> {{applications.0.name}}<h3>
+            <h3>{{project.name}} --> {{application.name}}<h3>
         </div>
         <div class="panel-body">
             <div class="table-responsive"></div>
@@ -31,29 +30,23 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th></th>
-                        {% for item in applications %}
-                        <th>{{item.name}}</th>
-                        {% endfor %}
+                        <th>Vulnerability</th>
+                        <th>Checkbox</th>
+                        <th>Notes</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for check in checklists %}
+                    {% for item in table %}
                     <tr>
-                        <td>{{check}}</td>
-                        {% for item in applications %}
-                        <td><input type="checkbox" name="{{item.id}}" value="{{item.check}}">
-                        </td>
-                        {% endfor %}
+                        <td>{{item.0}}</td>
+                        <td><input type="checkbox" id="{{item.0.id}}" name="check" value="{{item.1}}"></td>
+                        <td><input type="text"></td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
-            {% for item in applications %}
-            <script>myFunction({{ item.id }})</script>
-            {% endfor %}
+            <button onclick="myFunction()">Submit</button>
         </div>
     </div>
 </div>
-{% endif %}
 {% endblock %}

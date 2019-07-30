@@ -46,7 +46,7 @@
     }
   }
 </script>
-{% if user.is_authenticated %}
+
 <p>Hi there {{user.username}}</p>
 {% for a in projects %}
 <div class="container">
@@ -95,7 +95,4 @@
     <span class="glyphicon glyphicon-plus-sign"></span> Create New Project
   </a>
 </div>
-{% else %}
-<p>You must login first.</p>
-{% endif %}
 {% endblock %}

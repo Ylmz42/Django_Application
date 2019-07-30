@@ -1,7 +1,7 @@
 {% extends 'project/base.html' %}
+{% block title %}{{project.name}}'s Detail{% endblock %}
 
 {% block body %}
-{% if user.is_authenticated%}
 <div class="container" style="width: 95%">
   <div class="panel panel-default" style="margin: 50px;">
     <div class="panel-heading">
@@ -27,22 +27,24 @@
         <thead>
           <tr>
             <th>#</th>
-            <th>Firstname</th>
-            <th>Lastname</th>
-            <th>Age</th>
-            <th>City</th>
-            <th>Country</th>
+            <th>Application's name</th>
+            <th>Application's access</th>
+            <th>Application's users</th>
+            <th>Application's notes</th>
+            <th>Application's completed</th>
           </tr>
         </thead>
         <tbody>
+          {% for item in applications %}
           <tr>
-            <td>1</td>
-            <td>{{project.name}}</td>
-            <td>{{project.situation}}</td>
-            <td>{{project}}</td>
-            <td>New York</td>
-            <td>USA</td>
+            <td>{{forloop.counter}}</td>
+            <td><a href="{% url 'project:application_detail' project.id item.id %}">{{item.name}}</td>
+            <td>{{item.access}}</td>
+            <td>{{item.username}}</td>
+            <td>{{item.notes}}</td>
+            <td>%70</td>
           </tr>
+          {% endfor %}
         </tbody>
       </table>
       <p>{{a.id}}</p>
@@ -58,5 +60,4 @@
     </div>
   </div>
 </div>
-{% endif %}
 {% endblock %}
