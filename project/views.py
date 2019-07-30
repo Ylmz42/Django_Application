@@ -1,3 +1,4 @@
+
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.shortcuts import render, get_object_or_404
@@ -104,7 +105,7 @@ def application_detail(request, project_id, application_id):
         for i in range(checkboxLength):
             table.append([list(checklists)[i], list(application.checklist)[i]])
 
-        return render(request, 'project/application_detail.html', {'project':project,'application': application, 'checklists': checklists, 'checkboxLength': checkboxLength, 'table': table})
+        return render(request, 'project/application_detail.html', {'project': project, 'application': application, 'checklists': checklists, 'checkboxLength': checkboxLength, 'table': table})
 
 
 def checklist_detail(request, project_id):
@@ -161,8 +162,8 @@ def create_application(request, project_id):
         project = get_object_or_404(Project, pk=project_id)
         if form.is_valid():
             applications = Application.objects.all()
-            for a in projects_applications:
-                if a.application_name == form.cleaned_data.get("application_name"):
+            for apps in applications:
+                if apps.name == form.cleaned_data.get("name"):
                     context = {
                         'project': project,
                         'form': form,

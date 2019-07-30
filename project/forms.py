@@ -8,14 +8,14 @@ class ProjectForm(forms.ModelForm):
 
     class Meta:
         model = Project
-        fields = ['user', 'name', 'situation']
+        fields = ['name', 'situation']
 
 
 class ApplicationForm(forms.ModelForm):
 
     class Meta:
         model = Application
-        fields = ['project', 'name', 'access', 'username', 'notes']
+        fields = ['name', 'access', 'username', 'notes']
 
 
 class UserForm(forms.ModelForm):
