@@ -2,63 +2,75 @@
 {% block title %}{{project.name}}'s Detail{% endblock %}
 
 {% block body %}
-<div class="container" style="width: 95%">
-  <div class="panel panel-default" style="margin: 50px;">
-    <div class="panel-heading">
-      <h3>{{project.name}}<h3>
-    </div>
-    <div class="panel-body">
-      <!-- Edit -->
-      <a href="#" class="btn btn-warning " style="background-color: orange; border: none; margin: 10px 0px 10px 20px">
-        <span class="glyphicon glyphicon-edit" style="background-color: orange"></span> Edit
-      </a>
-      <!-- Delete -->
-      <a href="{% url 'project:delete_project' project.id %}" class="btn btn-danger "
-        style="background-color: red; border: none;"
-        onclick="return confirm('Are you sure you want to delete this project.')">
-        <span class="glyphicon glyphicon-remove-sign" style="background-color: red"></span> Remove
-      </a>
-      <!-- Info -->
-      <a href="#coll" class="btn btn-info" data-toggle="collapse"
-        style="background-color:#1996ff; border: none; float:right; margin: 10px 20px 10px 0px">
-        <span class="glyphicon glyphicon-info-sign" style="background-color:#1996ff"></span> Info
-      </a>
-      <div class="table-responsive-lg">
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Application's name</th>
-              <th>Application's access</th>
-              <th>Application's users</th>
-              <th>Application's notes</th>
-              <th>Application's completed</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for item in applications %}
-            <tr>
-              <td>{{forloop.counter}}</td>
-              <td><a href="{% url 'project:application_detail' project.id item.id %}">{{item.name}}</td>
-              <td>{{item.access}}</td>
-              <td>{{item.username}}</td>
-              <td>{{item.notes}}</td>
-              <td>%70</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-10 col-sm-offset-1">
+
+      <div class="panel panel-default">
+
+        <div class="panel-heading">
+          <h3>{{project.name}}</h3>
+        </div>
+
+        <div class="panel-body">
+
+          <div class="table-responsive-sm">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Access</th>
+                  <th>Users</th>
+                  <th>Notes</th>
+                  <th>Completed</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for application in applications %}
+                <tr>
+                  <td>
+                    <a href="{% url 'project:delete_application' project.id application.id %}"
+                      class="btn btn-danger btn-sm" style="background-color: red; border: none; float:left;">
+                      <span class="glyphicon glyphicon-remove-sign" style="background-color: red"></span>
+                    </a>
+                    <a href="#" class="btn btn-warning btn-sm"
+                      style="background-color: orange; border: none; float:left;">
+                      <span class="glyphicon glyphicon-edit" style="background-color: orange"></span> Edit
+                    </a>
+                  </td>
+                  <td>{{forloop.counter}}</td>
+                  <td>{{application.name}}</td>
+                  <td>{{application.access}}</td>
+                  <td>{{application.username}}</td>
+                  <td>{{application.notes}}</td>
+                  <td>%70</td>
+                  <td>
+                    <a href="{% url 'project:application_detail' project.id application.id %}"
+                      class="btn btn-info btn-sm" style="background-color:#1996ff; border: none; float: right;">
+                      <span class="glyphicon glyphicon-info-sign" style="background-color:#1996ff"></span>
+                    </a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          <div>
+            <a href="{% url 'project:create_application' project.id %}" class="btn btn-success btn-lg"
+              style="border:none">
+              <span class="glyphicon glyphicon-plus-sign"></span> New Application
+            </a>
+          </div>
+
+        </div>
+
       </div>
-      <p>{{a.id}}</p>
-      <div id="coll">
-        <p>{{project.name}}</p>
-        <p id="demo"></p>
-      </div>
-      <div style="margin: 30px 0px 10px 30px">
-        <a href="{% url 'project:create_application' project.id %}" class="btn btn-success btn-lg" style="border:none">
-          <span class="glyphicon glyphicon-plus-sign"></span> Create New Application
-        </a>
-      </div>
+
     </div>
   </div>
 </div>

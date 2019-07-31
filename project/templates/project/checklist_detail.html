@@ -2,10 +2,61 @@
 {% block title %}{{project.name}}'s Checklist{% endblock %}
 
 {% block body %}
-<div class="container">
-    <form method="POST" action="{% url "project:index" %}" enctype="multipart/form-data">
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-offset-1">
+
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
+                    <h3>{{project.name}} --> Checklist Detail</h3>
+                </div>
+
+                <div class="panel-body">
+                    <div class="table-responsive-sm">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th></th>
+                                    {% for item in applications %}
+                                    <th>{{item.name}}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for check in checklists %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{check}}</td>
+                                    {% for item in applications %}
+                                    <td>
+                                        <input type="checkbox" name="{{item.id}}" value="{{item.checklist}}"
+                                            onchange="update_db({{item.id}}, {{check.id}})">
+                                        <!--  value="{{item.check}}" -->
+                                    </td>
+                                    {% endfor %}
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% for item in applications %}
+                        <script>myFunction({{ item.id }})</script>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+<!--     <form method="POST" action="{% url "project:index" %}" enctype="multipart/form-data">
         {% csrf_token %}
-        <!-- COMPONENT START -->
+
         <div class="form-group">
             <div class="input-group input-file" name="Fichier1">
                 <input type="text" class="form-control" placeholder='Choose a file...' />
@@ -14,47 +65,9 @@
                 </span>
             </div>
         </div>
-        <!-- COMPONENT END -->
+
         <div class="form-group">
             <button type="submit" class="btn btn-primary pull-right">Submit</button>
             <button type="reset" class="btn btn-danger">Reset</button>
         </div>
-    </form>
-
-    <div class="panel panel-default" style="margin: 50px;">
-        <div class="panel-heading">
-            <h3>{{project.name}} --> Checklist detail<h3>
-        </div>
-        <div class="panel-body">
-            <div class="table-responsive"></div>
-
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th></th>
-                        {% for item in applications %}
-                        <th>{{item.name}}</th>
-                        {% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for check in checklists %}
-                    <tr>
-                        <td>{{check}}</td>
-                        {% for item in applications %}
-                        <td>
-                            <input type="checkbox" name="{{item.id}}" value="{{item.checklist}}"
-                                onchange="update_db({{item.id}}, {{check.id}})"> <!--  value="{{item.check}}" -->
-                        </td>
-                        {% endfor %}
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            {% for item in applications %}
-            <script>myFunction({{ item.id }})</script>
-            {% endfor %}
-        </div>
-    </div>
-</div>
-{% endblock %}
+    </form> -->
