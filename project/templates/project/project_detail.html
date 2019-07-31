@@ -23,30 +23,32 @@
         style="background-color:#1996ff; border: none; float:right; margin: 10px 20px 10px 0px">
         <span class="glyphicon glyphicon-info-sign" style="background-color:#1996ff"></span> Info
       </a>
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Application's name</th>
-            <th>Application's access</th>
-            <th>Application's users</th>
-            <th>Application's notes</th>
-            <th>Application's completed</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for item in applications %}
-          <tr>
-            <td>{{forloop.counter}}</td>
-            <td><a href="{% url 'project:application_detail' project.id item.id %}">{{item.name}}</td>
-            <td>{{item.access}}</td>
-            <td>{{item.username}}</td>
-            <td>{{item.notes}}</td>
-            <td>%70</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+      <div class="table-responsive-lg">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Application's name</th>
+              <th>Application's access</th>
+              <th>Application's users</th>
+              <th>Application's notes</th>
+              <th>Application's completed</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in applications %}
+            <tr>
+              <td>{{forloop.counter}}</td>
+              <td><a href="{% url 'project:application_detail' project.id item.id %}">{{item.name}}</td>
+              <td>{{item.access}}</td>
+              <td>{{item.username}}</td>
+              <td>{{item.notes}}</td>
+              <td>%70</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
       <p>{{a.id}}</p>
       <div id="coll">
         <p>{{project.name}}</p>
