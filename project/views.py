@@ -8,15 +8,15 @@ from .models import Project, Application, CheckList
 import sqlite3
 # Create your views here.
 
-
+#This is the main page. When user logs in user will se this page.
 def index(request):
-    if not request.user.is_authenticated:
+    if not request.user.is_authenticated:#If user isn't loged in.
         return render(request, 'project/login.html')
     else:
         #projects = Project.objects.filter(user=request.user)
         #applications = Application.objects.all()
-        projects = Project.objects.all()
-        applications = Application.usernameInApp(request)
+        projects = Project.objects.all()#Gets projects.
+        applications = Application.usernameInApp(request)#Get applications that user is authorized.
         query = request.GET.get("q")
         if query:
             projects = projects.filter(
@@ -33,7 +33,7 @@ def index(request):
         else:
             return render(request, 'project/index.html', {'projects': projects, 'applications': applications})
 
-
+#Register form
 def register(request):
     form = UserForm(request.POST or None)
     if form.is_valid():
@@ -54,7 +54,7 @@ def register(request):
     }
     return render(request, 'project/register.html', context)
 
-
+#Log in page.
 def login_user(request):
     if request.method == "POST":
         username = request.POST['username']
@@ -73,7 +73,7 @@ def login_user(request):
             return render(request, 'project/login.html', {'error_message': 'Invalid login'})
     return render(request, 'project/login.html')
 
-
+#This is for log out.
 def logout_user(request):
     logout(request)
     form = UserForm(request.POST or None)
@@ -82,7 +82,7 @@ def logout_user(request):
     }
     return render(request, 'project/login.html', context)
 
-
+#This is for detailed project page.
 def project_detail(request, project_id):
     if not request.user.is_authenticated:
         return render(request, 'project/login.html')
@@ -92,7 +92,7 @@ def project_detail(request, project_id):
         applications = Application.objects.all().filter(project_id=project.id)
         return render(request, 'project/project_detail.html', {'project': project, 'applications': applications, 'user': user})
 
-
+#This is for detailed application page with checkboxes.
 def application_detail(request, project_id, application_id):
     if not request.user.is_authenticated:
         return render(request, 'project/login.html')
@@ -110,7 +110,7 @@ def application_detail(request, project_id, application_id):
 
         return render(request, 'project/application_detail.html', {'project': project, 'application': application, 'checklists': checklists, 'checkboxLength': checkboxLength, 'table': table})
 
-
+#This is for user to see selected project applications and checkboxes together.
 def checklist_detail(request, project_id):
     if not request.user.is_authenticated:
         return render(request, 'project/login.html')
@@ -130,7 +130,7 @@ def checklist_detail(request, project_id):
 
         return render(request, 'project/checklist_detail.html', {'project': project, 'applications': applications, 'checklists': checklists, 'table': table})
 
-
+#This is for creating projects.
 def create_project(request):
     if not request.user.is_authenticated:
         return render(request, 'project/login.html')
@@ -146,7 +146,7 @@ def create_project(request):
         }
     return render(request, 'project/create_project.html', context)
 
-
+#This is for deleting projects.
 def delete_project(request, project_id):
     if not request.user.is_authenticated:
         return render(request, 'project/login.html')
@@ -155,7 +155,7 @@ def delete_project(request, project_id):
         project.delete()
         return render(request, 'project/index.html')
 
-
+#This is for creating application.
 def create_application(request, project_id):
     if not request.user.is_authenticated:
         return render(request, 'project/login.html')
@@ -173,8 +173,13 @@ def create_application(request, project_id):
                     }
                 return render(request, 'project/create_application.html', context)
             application = form.save(commit=False)
-            application.project = project
-
+            application.project = project#User can only create projects that project's user is itself.
+            c = CheckList.objects.all()
+            cstr = ''
+            for a in c:
+                cstr =cstr+'0'
+            application.checklist = cstr
+            application.reported = cstr
             application.save()
             return render(request, 'project/project_detail.html', {'project': project})
         context = {
@@ -183,13 +188,14 @@ def create_application(request, project_id):
         }
         return render(request, 'project/create_application.html', context)
 
-
+#This is for deleting application.
 def delete_application(request, project_id, application_id):
     project = get_object_or_404(Project, pk=project_id)
     application = Application.objects.get(pk=application_id)
     application.delete()
     return render(request, 'project/project_detail.html', {'project': project})
 
+#This is for updating database when any of checkbox has changed.
 def update(request, p_id, clist):
     cl = str(clist)
     conn = sqlite3.connect('db.sqlite3')

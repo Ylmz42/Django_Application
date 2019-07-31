@@ -24,7 +24,7 @@ function bs_input_file() {
         }
     );
 }
-
+//This function's for setting checkboxes status.
 function myFunction(item_id) {
     var checkBox = document.getElementsByName(item_id);
     for (var i = 0; i < checkBox.length; i++) {
@@ -36,7 +36,7 @@ function myFunction(item_id) {
         }
     }
 }
-
+//This function's for updating database.
 function update_db(item_id, check_id) {
     var checkBox = document.getElementsByName(item_id);
     var b = '';
