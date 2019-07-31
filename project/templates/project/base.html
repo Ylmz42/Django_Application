@@ -45,7 +45,7 @@
             <span class="glyphicon glyphicon-user"></span> {{user.username}}</a>
         </li>
         <li class="{% block logout_active %}{% endblock %}"><a href="{% url 'project:logout_user' %}">
-            <span class="glyphicon glyphicon-log-out"></span> Logout</a>
+            <span class="glyphicon glyphicon-log-out"></span> Log out</a>
         </li>
       </ul>
 
@@ -56,4 +56,5 @@
   {% endblock %}
 
 </body>
+
 </html>

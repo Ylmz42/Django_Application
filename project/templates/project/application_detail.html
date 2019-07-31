@@ -18,19 +18,38 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>#</th>
-                                    <th>Vulnerability</th>
-                                    <th>Checkbox</th>
-                                    <th>Notes</th>
+                                    <div class="col-sm-1">
+                                        <th style="width: 5%; text-align: center">#</th>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <th style="width: 15%; text-align: center">Vulnerability</th>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <th style="width: 5%; text-align: center"></th>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <th style="width: 75%; text-align: center">Notes</th>
+                                    </div>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for item in table %}
                                 <tr>
-                                    <td>{{forloop.counter}}</td>
-                                    <td>{{item.0}}</td>
-                                    <td><input type="checkbox" id="{{item.0.id}}" name="check" value="{{item.1}}"></td>
-                                    <td><input type="text"></td>
+                                    <div class="col-sm-1">
+                                        <td style="width: 5%; text-align: center">{{forloop.counter}}</td>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <td style="width: 15%; text-align: center">{{item.0}}</td>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <td style="width: 5%; text-align: center">
+                                            <input type="checkbox" id="{{item.0.id}}" name="check" value="{{item.1}}">
+                                        </td>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <td style="width: 75%; text-align: center">
+                                            <input style="width: 90%" type="text"></td>
+                                    </div>
                                 </tr>
                                 {% endfor %}
                             </tbody>

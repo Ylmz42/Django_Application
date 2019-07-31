@@ -5,7 +5,7 @@
 
 <div class="container-fluid">
   <div class="row">
-    <div class="col-sm-10 col-sm-offset-1">
+    <div class="col-sm-12">
 
       <div class="panel panel-default">
 
@@ -19,41 +19,73 @@
             <table class="table table-hover">
               <thead>
                 <tr>
-                  <th></th>
-                  <th>#</th>
-                  <th>Name</th>
-                  <th>Access</th>
-                  <th>Users</th>
-                  <th>Notes</th>
-                  <th>Completed</th>
-                  <th></th>
+                  <div class="col-sm-1">
+                    <th>Remove</th>
+                  </div>
+                  <div class="col-sm-1">
+                    <th>#</th>
+                  </div>
+                  <div class="col-sm-2">
+                    <th>Name</th>
+                  </div>
+                  <div class="col-sm-2">
+                    <th>Access</th>
+                  </div>
+                  <div class="col-sm-2">
+                    <th>Users</th>
+                  </div>
+                  <div class="col-sm-2">
+                    <th>Notes</th>
+                  </div>
+                  <div class="col-sm-1">
+                    <th style="text-align: center">Completed</th>
+                  </div>
+                  <div class="col-sm-1">
+                    <th>Info</th>
+                  </div>
                 </tr>
               </thead>
               <tbody>
                 {% for application in applications %}
                 <tr>
-                  <td>
-                    <a href="{% url 'project:delete_application' project.id application.id %}"
-                      class="btn btn-danger btn-sm" style="background-color: red; border: none; float:left;">
-                      <span class="glyphicon glyphicon-remove-sign" style="background-color: red"></span>
-                    </a>
-                    <a href="#" class="btn btn-warning btn-sm"
-                      style="background-color: orange; border: none; float:left;">
-                      <span class="glyphicon glyphicon-edit" style="background-color: orange"></span> Edit
-                    </a>
-                  </td>
-                  <td>{{forloop.counter}}</td>
-                  <td>{{application.name}}</td>
-                  <td>{{application.access}}</td>
-                  <td>{{application.username}}</td>
-                  <td>{{application.notes}}</td>
-                  <td>%70</td>
-                  <td>
-                    <a href="{% url 'project:application_detail' project.id application.id %}"
-                      class="btn btn-info btn-sm" style="background-color:#1996ff; border: none; float: right;">
-                      <span class="glyphicon glyphicon-info-sign" style="background-color:#1996ff"></span>
-                    </a>
-                  </td>
+                  <div class="col-sm-1">
+                    <td>
+                      <a href="{% url 'project:delete_application' project.id application.id %}"
+                        class="btn btn-danger btn-sm" style="background-color: red; border: none; float:left;">
+                        <span class="glyphicon glyphicon-remove-sign" style="background-color: red"></span>
+                      </a>
+                      <a href="#" class="btn btn-warning btn-sm"
+                        style="background-color: orange; border: none; float:left;">
+                        <span class="glyphicon glyphicon-edit" style="background-color: orange"></span>
+                      </a>
+                    </td>
+                  </div>
+                  <div class="col-sm-1">
+                    <td>{{forloop.counter}}</td>
+                  </div>
+                  <div class="col-sm-2">
+                    <td>{{application.name}}</td>
+                  </div>
+                  <div class="col-sm-2">
+                    <td>{{application.access}}</td>
+                  </div>
+                  <div class="col-sm-2">
+                    <td>{{application.username}}</td>
+                  </div>
+                  <div class="col-sm-2">
+                    <td>{{application.notes}}</td>
+                  </div>
+                  <div class="col-sm-1">
+                    <td style="text-align: center">%70</td>
+                  </div>
+                  <div class="col-sm-1">
+                    <td>
+                      <a href="{% url 'project:application_detail' project.id application.id %}"
+                        class="btn btn-info btn-sm" style="background-color:#1996ff; border: none; float: right;">
+                        <span class="glyphicon glyphicon-info-sign" style="background-color:#1996ff"></span>
+                      </a>
+                    </td>
+                  </div>
                 </tr>
                 {% endfor %}
               </tbody>
