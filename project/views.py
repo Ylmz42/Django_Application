@@ -247,7 +247,7 @@ def delete_application(request, project_id, application_id):
 #This is for updating database when any of checkbox has changed.
 
 
-def edit_application(request, project_id, edit_application):
+def edit_application(request, project_id, application_id):
     if not request.user.is_authenticated:
         return render(request, 'project/login.html')
     else:
