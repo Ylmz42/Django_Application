@@ -64,11 +64,6 @@
                 {% endif %}
                 {% endfor %}
               </table>
-              <br>
-              <a href="#" class="btn btn-danger " onclick="return Delete_Application({{a.id}})"
-                style="background-color: red; border: none;">
-                <span class="glyphicon glyphicon-remove-sign" style="background-color: red"></span> Remove
-              </a>
             </div>
           </div>
         </div>
@@ -79,15 +74,5 @@
   </div>
 </div>
 {% endfor %}
-
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-sm-10 col-lg-offset-1">
-      <a href="{% url 'project:create_project' %}" class="btn btn-success btn-lg" style="border:none">
-        <span class="glyphicon glyphicon-plus-sign"></span> New Project
-      </a>
-    </div>
-  </div>
-</div>
 
 {% endblock %}

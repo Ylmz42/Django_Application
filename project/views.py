@@ -43,14 +43,18 @@ def projects(request):
     if not request.user.is_authenticated:
         return render(request, 'project/login.html')
     else:
-        return render(request, 'project/projects.html')
+        projects = Project.objects.all()
+        applications = Application.usernameInApp(request)
+        return render(request, 'project/projects.html', {'projects': projects, 'applications': applications})
 
 
 def applications(request):
     if not request.user.is_authenticated:
         return render(request, 'project/login.html')
     else:
-        return render(request, 'project/applications.html')
+        projects = Project.objects.all()
+        applications = Application.usernameInApp(request)
+        return render(request, 'project/applications.html', {'projects': projects, 'applications': applications})
 
 
 def register(request):
@@ -191,6 +195,13 @@ def delete_project(request, project_id):
 #This is for creating application.
 
 
+def edit_project(request, project_id):
+    if not request.user.is_authenticated:
+        return render(request, 'project/login.html')
+    else:
+        return render(request, 'project/edit_project.html')
+
+
 def create_application(request, project_id):
     if not request.user.is_authenticated:
         return render(request, 'project/login.html')
@@ -234,6 +245,13 @@ def delete_application(request, project_id, application_id):
     return render(request, 'project/project_detail.html', {'project': project})
 
 #This is for updating database when any of checkbox has changed.
+
+
+def edit_application(request, project_id, edit_application):
+    if not request.user.is_authenticated:
+        return render(request, 'project/login.html')
+    else:
+        return render(request, 'project/edit_application.html')
 
 
 def update(request, p_id, clist):

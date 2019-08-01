@@ -16,7 +16,9 @@ urlpatterns = [
     url(r'^(?P<project_id>[0-9]+)/checklist_detail/$',views.checklist_detail, name='checklist_detail'),
     url(r'^create_project/$', views.create_project, name='create_project'),
     url(r'^(?P<project_id>[0-9]+)/delete_project/$',views.delete_project, name='delete_project'),
+    url(r'^(?P<project_id>[0-9]+)/edit_project/$',views.edit_project, name='edit_project'),
     url(r'^(?P<project_id>[0-9]+)/create_application/$',views.create_application, name='create_application'),
     url(r'^(?P<project_id>[0-9]+)/delete_application/(?P<application_id>[0-9]+)/$',views.delete_application, name='delete_application'),
+    url(r'^(?P<project_id>[0-9]+)/edit_application/(?P<application_id>[0-9]+)/$',views.edit_application, name='edit_application'),
     url(r'^update/(?P<p_id>[0-9]+)/(?P<clist>[0-9]+)/$',views.update, name='update'),
 ]
