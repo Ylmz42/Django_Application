@@ -251,7 +251,21 @@ def edit_application(request, project_id, application_id):
     if not request.user.is_authenticated:
         return render(request, 'project/login.html')
     else:
-        return render(request, 'project/edit_application.html')
+        instance = get_object_or_404(Application, id=application_id)
+        form = ApplicationForm(request.POST or None, instance = instance)
+        project = get_object_or_404(Project, pk=project_id)
+        if form.is_valid():
+            applications = Application.objects.all()
+            application = form.save(commit=False)
+            application.save()
+            user = request.user
+            applications = Application.objects.all().filter(project_id=project.id)
+            return render(request, 'project/project_detail.html', {'project': project, 'applications': applications, 'user': user})
+        context = {
+            'project': project,
+            'form': form,
+        }
+        return render(request, 'project/create_application.html', context)
 
 
 def update(request, p_id, clist):
