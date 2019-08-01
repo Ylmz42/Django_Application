@@ -39,6 +39,20 @@ def index(request):
 #Register form
 
 
+def projects(request):
+    if not request.user.is_authenticated:
+        return render(request, 'project/login.html')
+    else:
+        return render(request, 'project/projects.html')
+
+
+def applications(request):
+    if not request.user.is_authenticated:
+        return render(request, 'project/login.html')
+    else:
+        return render(request, 'project/applications.html')
+
+
 def register(request):
     form = UserForm(request.POST or None)
     if form.is_valid():
