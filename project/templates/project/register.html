@@ -17,10 +17,12 @@
 
           <div class="panel-body">
             {% if error_message %}
+
             <p>
               <strong>{{error_message}}</strong>
             </p>
-            {% endif %}
+
+            {% else %}
 
             <form class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
               {% csrf_token %}
@@ -31,7 +33,10 @@
                   <button type="submit" class="btn btn-success">Submit</button>
                 </div>
               </div>
+
             </form>
+
+            {% endif %}
           </div>
 
           <div class="panel-footer">
@@ -39,6 +44,7 @@
               Already have an account? <a href="{% url 'project:login_user' %}">Click here</a> to log in.
             </p>
           </div>
+
         </div>
       </div>
 

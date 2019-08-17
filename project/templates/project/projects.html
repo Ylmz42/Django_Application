@@ -4,89 +4,26 @@
 
 {% block body %}
 
-{% for project in projects %}
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-10 col-sm-offset-1">
 
+            {% for project in projects %}
+
             <div class="panel panel-default">
 
                 <div class="panel-heading">
-                    <h3> <a href="#{{project.id}}" data-toggle="collapse">{{project.name}}</a></h3>
-                </div>
-
-                <div id="{{project.id}}" class="collapse">
-                    <div class="panel-body">
-                        <div class="table-responsive-sm">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <div class="col-sm-1">
-                                            <th style="width:5%; text-align: center">#</th>
-                                        </div>
-                                        <div class="col-sm-2">
-                                            <th style="width:15%; text-align: center">Application Name</th>
-                                        </div>
-                                        <div class="col-sm-2">
-                                            <th style="width:20%; text-align: center">Application Access</th>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <th style="width:50%; text-align: center">Application Notes</th>
-                                        </div>
-                                        <div class="col-sm-1">
-                                            <th style="width:10%; text-align: center">Finish</th>
-                                        </div>
-                                    </tr>
-                                </thead>
-                                {% for application in applications %}
-                                {% if application.project.id == project.id %}
-                                <tbody>
-                                    <tr>
-                                        <div class="col-sm-1">
-                                            <td style="width:5%; text-align: center">{{forloop.counter}}</td>
-                                        </div>
-                                        <div class="col-sm-2">
-                                            <td style="width:15%; text-align: center">{{application.name}}</td>
-                                        </div>
-                                        <div class="col-sm-2">
-                                            <td style="width:20%; text-align: center">{{application.access}}</td>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <td style="width:50%; text-align: center">{{application.notes}}</td>
-                                        </div>
-                                        <div class="col-sm-1">
-                                            <td style="width:10%; text-align: center">
-                                                <span class="glyphicon glyphicon-unchecked"></span>OK
-                                            </td>
-                                        </div>
-                                    </tr>
-                                </tbody>
-                                {% endif %}
-                                {% endfor %}
-                            </table>
-                            <br>
-                            <a href="#" class="btn btn-danger " onclick="return Delete_Application({{a.id}})"
-                                style="background-color: red; border: none;">
-                                <span class="glyphicon glyphicon-remove-sign" style="background-color: red"></span>
-                                Remove
-                            </a>
-                        </div>
-                    </div>
+                    <h3><a href="{% url 'project:project_detail' project.id %}">{{project.name}}</a></h3>
                 </div>
 
             </div>
 
-        </div>
-    </div>
-</div>
-{% endfor %}
+            {% endfor %}
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-sm-10 col-lg-offset-1">
             <a href="{% url 'project:create_project' %}" class="btn btn-success btn-lg" style="border:none">
                 <span class="glyphicon glyphicon-plus-sign"></span> New Project
             </a>
+
         </div>
     </div>
 </div>

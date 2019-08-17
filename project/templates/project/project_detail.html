@@ -14,81 +14,76 @@
         </div>
 
         <div class="panel-body">
-
           <div class="table-responsive-sm">
             <table class="table table-hover">
+
               <thead>
                 <tr>
                   <div class="col-sm-1">
-                    <th>Remove</th>
+                    <th style="width:5%; text-align: center"></th>
                   </div>
                   <div class="col-sm-1">
-                    <th>#</th>
+                    <th style="width:5%; text-align: center">#</th>
                   </div>
                   <div class="col-sm-2">
-                    <th>Name</th>
+                    <th style="width:15%; text-align: center">Name</th>
                   </div>
                   <div class="col-sm-2">
-                    <th>Access</th>
-                  </div>
-                  <div class="col-sm-2">
-                    <th>Users</th>
-                  </div>
-                  <div class="col-sm-2">
-                    <th>Notes</th>
+                    <th style="width:15%; text-align: center">Access</th>
                   </div>
                   <div class="col-sm-1">
-                    <th style="text-align: center">Completed</th>
+                    <th style="width:15%; text-align: center">Users</th>
+                  </div>
+                  <div class="col-sm-2">
+                    <th style="width:30%; text-align: center">Notes</th>
                   </div>
                   <div class="col-sm-1">
-                    <th>Info</th>
+                    <th style="width:15%; text-align: center">Completed</th>
                   </div>
                 </tr>
               </thead>
+
               <tbody>
+
                 {% for application in applications %}
+
                 <tr>
                   <div class="col-sm-1">
-                    <td>
+                    <td style="width:5%; text-align: center">
                       <a href="{% url 'project:delete_application' project.id application.id %}"
-                        class="btn btn-danger btn-sm" style="background-color: red; border: none; float:left;">
+                        class="btn btn-danger btn-sm" style="background-color: red; border: none">
                         <span class="glyphicon glyphicon-remove-sign" style="background-color: red"></span>
                       </a>
-                      <a href="{% url 'project:edit_application' project.id application.id %}" class="btn btn-warning btn-sm"
-                        style="background-color: orange; border: none; float:left;">
-                        <span class="glyphicon glyphicon-edit" style="background-color: orange"></span>
-                      </a>
                     </td>
                   </div>
                   <div class="col-sm-1">
-                    <td>{{forloop.counter}}</td>
+                    <td style="width:5%; text-align: center">{{forloop.counter}}</td>
                   </div>
                   <div class="col-sm-2">
-                    <td>{{application.name}}</td>
-                  </div>
-                  <div class="col-sm-2">
-                    <td>{{application.access}}</td>
-                  </div>
-                  <div class="col-sm-2">
-                    <td>{{application.username}}</td>
-                  </div>
-                  <div class="col-sm-2">
-                    <td>{{application.notes}}</td>
-                  </div>
-                  <div class="col-sm-1">
-                    <td style="text-align: center">%70</td>
-                  </div>
-                  <div class="col-sm-1">
-                    <td>
-                      <a href="{% url 'project:application_detail' project.id application.id %}"
-                        class="btn btn-info btn-sm" style="background-color:#1996ff; border: none; float: right;">
-                        <span class="glyphicon glyphicon-info-sign" style="background-color:#1996ff"></span>
+                    <td style="width:15%; text-align: center">
+                      <a href="{% url 'project:application_detail' project.id application.id %}">
+                        {{application.name}}
                       </a>
                     </td>
+                  </div>
+                  <div class="col-sm-2">
+                    <td style="width:15%; text-align: center">{{application.access}}</td>
+                  </div>
+                  <div class="col-sm-1">
+                    <td style="width:15%; text-align: center">{{application.username}}</td>
+                  </div>
+                  <div class="col-sm-2">
+                    <td style="width:30%; text-align: center">{{application.notes}}</td>
+                  </div>
+                  <div class="col-sm-1">
+                    <td style="width:15%; text-align: center">70 %</td>
                   </div>
                 </tr>
+
                 {% endfor %}
+
               </tbody>
+
             </table>
           </div>
 

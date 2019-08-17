@@ -1,4 +1,3 @@
-
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.shortcuts import render, get_object_or_404
@@ -8,68 +7,66 @@ from .models import Project, Application, CheckList
 import sqlite3
 # Create your views here.
 
-#This is the main page. When user logs in user will se this page.
+# This is home page. When user logs in, the page that will be seen
 
 
 def index(request):
-    if not request.user.is_authenticated:  # If user isn't loged in.
+    if not request.user.is_authenticated:  # Does user log in?
         return render(request, 'project/login.html')
     else:
-        #projects = Project.objects.filter(user=request.user)
-        #applications = Application.objects.all()
-        projects = Project.objects.all()  # Gets projects.
-        # Get applications that user is authorized.
-        applications = Application.usernameInApp(request)
-        query = request.GET.get("q")
+        projects = Project.objects.all()  # Getter all projects
+        applications = Application.objects.all()  # Getter all applications
+
+        query = request.GET.get("q")  # Search project
+
         if query:
             projects = projects.filter(
                 Q(name__icontains=query)
             ).distinct()
-            applications = applications.filter(
-                Q(name__icontains=query)
-            ).distinct()
-            return render(request, 'project/index.html',
-                          {
-                              'projects': projects,
-                              'applications': applications
-                          })
+
+            return render(request, 'project/index.html', {'projects': projects, 'applications': applications})
         else:
             return render(request, 'project/index.html', {'projects': projects, 'applications': applications})
 
-#Register form
+# This is projects page
 
 
 def projects(request):
-    if not request.user.is_authenticated:
+    if not request.user.is_authenticated:  # Does user log in?
         return render(request, 'project/login.html')
     else:
-        projects = Project.objects.all()
-        applications = Application.usernameInApp(request)
-        return render(request, 'project/projects.html', {'projects': projects, 'applications': applications})
+        projects = Project.objects.all()  # Getter all projects
+        return render(request, 'project/projects.html', {'projects': projects})
+
+# This is applications page
 
 
 def applications(request):
-    if not request.user.is_authenticated:
+    if not request.user.is_authenticated:  # Does user log in?
         return render(request, 'project/login.html')
     else:
-        projects = Project.objects.all()
+        projects = Project.objects.all()  # Getter all projects
+        # Getter all applications that related with users who logged in
         applications = Application.usernameInApp(request)
         return render(request, 'project/applications.html', {'projects': projects, 'applications': applications})
+
+# This is register page
 
 
 def register(request):
     form = UserForm(request.POST or None)
-    if form.is_valid():
+    if form.is_valid():  # Is there register form?
         user = form.save(commit=False)
         username = form.cleaned_data['username']
         password = form.cleaned_data['password']
-        user.set_password(password)
-        user.save()
+        user.set_password(password)  # User's password is set
+        user.save()  # User's password is saved database
+        # User logs in home page
         user = authenticate(username=username, password=password)
         if user is not None:
             if user.is_active:
                 login(request, user)
-                projects = Project.objects.filter(user=request.user)
+                projects = Project.objects.all()
                 applications = Application.objects.all()
                 return render(request, 'project/index.html', {'projects': projects, 'applications': applications})
     context = {
@@ -77,7 +74,7 @@ def register(request):
     }
     return render(request, 'project/register.html', context)
 
-#Log in page.
+# This is log in page
 
 
 def login_user(request):
@@ -89,7 +86,7 @@ def login_user(request):
             if user.is_active:
                 login(request, user)
                 request.session.set_expiry(300)  # 5 minutes expire session
-                projects = Project.objects.filter(user=request.user)
+                projects = Project.objects.all()
                 applications = Application.objects.all()
                 return render(request, 'project/index.html', {'projects': projects, 'applications': applications})
             else:
@@ -98,7 +95,7 @@ def login_user(request):
             return render(request, 'project/login.html', {'error_message': 'Invalid login'})
     return render(request, 'project/login.html')
 
-#This is for log out.
+#This is log out
 
 
 def logout_user(request):
@@ -109,26 +106,26 @@ def logout_user(request):
     }
     return render(request, 'project/login.html', context)
 
-#This is for detailed project page.
+# This is project_detail page
+# project_id is the project unique id
 
 
 def project_detail(request, project_id):
-    if not request.user.is_authenticated:
+    if not request.user.is_authenticated:  # Does user log in?
         return render(request, 'project/login.html')
     else:
-        user = request.user
         project = get_object_or_404(Project, pk=project_id)
         applications = Application.objects.all().filter(project_id=project.id)
-        return render(request, 'project/project_detail.html', {'project': project, 'applications': applications, 'user': user})
 
-#This is for detailed application page with checkboxes.
+        return render(request, 'project/project_detail.html', {'project': project, 'applications': applications})
 
-
+# This is applications_detail page
+# project_id is the project unique id
+# application_id is the application unique id
 def application_detail(request, project_id, application_id):
-    if not request.user.is_authenticated:
+    if not request.user.is_authenticated: # Does user log in?
         return render(request, 'project/login.html')
     else:
-        user = request.user
         project = get_object_or_404(Project, pk=project_id)
         application = get_object_or_404(Application, pk=application_id)
         checklists = CheckList.objects.all()
@@ -195,13 +192,6 @@ def delete_project(request, project_id):
 #This is for creating application.
 
 
-def edit_project(request, project_id):
-    if not request.user.is_authenticated:
-        return render(request, 'project/login.html')
-    else:
-        return render(request, 'project/edit_project.html')
-
-
 def create_application(request, project_id):
     if not request.user.is_authenticated:
         return render(request, 'project/login.html')
@@ -245,27 +235,6 @@ def delete_application(request, project_id, application_id):
     return render(request, 'project/project_detail.html', {'project': project})
 
 #This is for updating database when any of checkbox has changed.
-
-
-def edit_application(request, project_id, application_id):
-    if not request.user.is_authenticated:
-        return render(request, 'project/login.html')
-    else:
-        instance = get_object_or_404(Application, id=application_id)
-        form = ApplicationForm(request.POST or None, instance = instance)
-        project = get_object_or_404(Project, pk=project_id)
-        if form.is_valid():
-            applications = Application.objects.all()
-            application = form.save(commit=False)
-            application.save()
-            user = request.user
-            applications = Application.objects.all().filter(project_id=project.id)
-            return render(request, 'project/project_detail.html', {'project': project, 'applications': applications, 'user': user})
-        context = {
-            'project': project,
-            'form': form,
-        }
-        return render(request, 'project/create_application.html', context)
 
 
 def update(request, p_id, clist):

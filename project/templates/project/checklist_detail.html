@@ -10,19 +10,20 @@
             <div class="panel panel-default">
 
                 <div class="panel-heading">
-                    <h3>{{project.name}} --> Report</h3>
+                    <h3>{{project.name}} --> Checklist</h3>
                 </div>
 
                 <div class="panel-body">
                     <div class="table-responsive-sm">
                         <table class="table table-hover">
+
                             <thead>
                                 <tr>
                                     <div class="col-sm-1">
                                         <th style="width: 5%; text-align: center">#</th>
                                     </div>
                                     <div class="col-sm-3">
-                                        <th style="width: 20%; text-align: center"></th>
+                                        <th style="width: 20%; text-align: center">Vulnerability</th>
                                     </div>
                                     {% for item in applications %}
                                     <div class="col-sm-2">
@@ -31,6 +32,7 @@
                                     {% endfor %}
                                 </tr>
                             </thead>
+
                             <tbody>
                                 {% for check in checklists %}
                                 <tr>
@@ -43,15 +45,15 @@
                                     {% for item in applications %}
                                     <div class="col-sm-2">
                                         <td style="width: 25%; text-align: center">
-                                            <input type="checkbox" name="{{item.id}}" value="{{item.checklist}}"
-                                                onchange="update_db({{item.id}}, {{check.id}})">
-                                            <!--  value="{{item.check}}" -->
+                                            <input type="checkbox" id="{{item.id}}" name="check"
+                                                value="{{item.checklist}}">
                                         </td>
                                     </div>
                                     {% endfor %}
                                 </tr>
                                 {% endfor %}
                             </tbody>
+
                         </table>
                     </div>
                 </div>
