@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 from .forms import ProjectForm, ApplicationForm, UserForm
@@ -236,16 +237,13 @@ def delete_application(request, project_id, application_id):
 
 #This is for updating database when any of checkbox has changed.
 
+def checkbox_check(request, application_id):
 
-def update(request, p_id, clist):
-    cl = str(clist)
-    conn = sqlite3.connect('db.sqlite3')
-    c = conn.cursor()
-    c.execute(
-        "UPDATE project_application SET checklist = ? WHERE id = ?", (cl, p_id))
-    conn.commit()
-    c.close()
-    conn.close()
-    aa = Application.objects.get(pk=p_id)
-    bb = aa.project_id
-    return checklist_detail(request, bb)
+    if request.method == 'POST':
+        checklist = request.POST['checklist']
+
+        application = get_object_or_404(Application, pk=application_id)
+        application.checklist = checklist
+
+        print(application.checklist)
+        return HttpResponse('')
