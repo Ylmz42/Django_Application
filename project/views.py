@@ -245,5 +245,13 @@ def checkbox_check(request, application_id):
         application = get_object_or_404(Application, pk=application_id)
         application.checklist = checklist
 
-        print(application.checklist)
+        print(checklist)
+        
+        conn = sqlite3.connect('db.sqlite3')
+        c = conn.cursor()
+        c.execute("UPDATE project_application SET checklist = ? WHERE id = ?", (checklist, application_id))
+        conn.commit()
+        c.close()
+        conn.close()
+        
         return HttpResponse('')

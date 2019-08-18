@@ -43,32 +43,33 @@ $(function () {
 
 function checkList(checkbox_id, application_id) {
 
-        $("#" + checkbox_id.toString()).change(function () {
+    $("#" + checkbox_id.toString()).change(function () {
 
-            var checklist = "";
+        var checklist = "";
 
-            $("input[type=checkbox]").each(function () {
+        $("input[type=checkbox]").each(function () {
 
-                if (this.checked == true) {
-                    isChecked = "1";
-                }
-                else {
-                    isChecked = "0";
-                }
-                checklist += isChecked;
-            });
-
-            $.ajax({
-                type: "POST",
-                url: "/checkbox_check/" + application_id.toString() + "/",
-                dataType: 'JSON',
-                data: {
-                    'checklist': checklist,
-                    csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()
-                },
-                success: function () {
-                    alert("Succesfull:" + checklist + "\n");
-                }
-            });
+            if (this.checked == true) {
+                isChecked = "1";
+            }
+            else {
+                isChecked = "0";
+            }
+            checklist += isChecked;
         });
+
+        $.ajax({
+            type: "POST",
+            url: "/checkbox_check/" + application_id + "/",
+            dataType: 'JSON',
+            data: {
+                'checklist': checklist,
+                csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()
+            },
+            success: function () {
+                alert("Succesfull:" + checklist + "\n");
+            }
+        });
+        console.log("Hello");
+    });
 }
