@@ -26,14 +26,11 @@
                                         <div class="col-sm-1">
                                             <th style="width: 5%; text-align: center">#</th>
                                         </div>
-                                        <div class="col-sm-2">
-                                            <th style="width: 15%; text-align: center">Vulnerability</th>
-                                        </div>
-                                        <div class="col-sm-1">
-                                            <th style="width: 5%; text-align: center"></th>
-                                        </div>
                                         <div class="col-sm-6">
-                                            <th style="width: 75%; text-align: center">Notes</th>
+                                            <th style="width: 65%; text-align: center">Vulnerability</th>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <th style="width: 30%; text-align: center"></th>
                                         </div>
                                     </tr>
                                 </thead>
@@ -44,19 +41,14 @@
                                         <div class="col-sm-1">
                                             <td style="width: 5%; text-align: center">{{forloop.counter}}</td>
                                         </div>
-                                        <div class="col-sm-2">
-                                            <td style="width: 15%; text-align: center">{{item.0}}</td>
+                                        <div class="col-sm-6">
+                                            <td style="width: 65%; text-align: center">{{item.0}}</td>
                                         </div>
-                                        <div class="col-sm-1">
-                                            <td style="width: 5%; text-align: center">
+                                        <div class="col-sm-3">
+                                            <td style="width: 30%; text-align: center">
                                                 <input type="checkbox" id="{{item.0.id}}" name="check"
                                                     value="{{item.1}}"
                                                     onclick="checkList({{item.0.id}}, {{application.id}})">
-                                            </td>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <td style="width: 75%; text-align: center">
-                                                <input style="width: 90%" type="text">
                                             </td>
                                         </div>
                                     </tr>

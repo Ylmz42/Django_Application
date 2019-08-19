@@ -86,7 +86,7 @@ def login_user(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                request.session.set_expiry(300)  # 5 minutes expire session
+                #request.session.set_expiry(300)  # 5 minutes expire session
                 projects = Project.objects.all()
                 applications = Application.objects.all()
                 return render(request, 'project/index.html', {'projects': projects, 'applications': applications})
@@ -123,8 +123,10 @@ def project_detail(request, project_id):
 # This is applications_detail page
 # project_id is the project unique id
 # application_id is the application unique id
+
+
 def application_detail(request, project_id, application_id):
-    if not request.user.is_authenticated: # Does user log in?
+    if not request.user.is_authenticated:  # Does user log in?
         return render(request, 'project/login.html')
     else:
         project = get_object_or_404(Project, pk=project_id)
@@ -237,6 +239,7 @@ def delete_application(request, project_id, application_id):
 
 #This is for updating database when any of checkbox has changed.
 
+
 def checkbox_check(request, application_id):
 
     if request.method == 'POST':
@@ -246,12 +249,13 @@ def checkbox_check(request, application_id):
         application.checklist = checklist
 
         print(checklist)
-        
+
         conn = sqlite3.connect('db.sqlite3')
         c = conn.cursor()
-        c.execute("UPDATE project_application SET checklist = ? WHERE id = ?", (checklist, application_id))
+        c.execute("UPDATE project_application SET checklist = ? WHERE id = ?",
+                  (checklist, application_id))
         conn.commit()
         c.close()
         conn.close()
-        
+
         return HttpResponse('')
