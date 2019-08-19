@@ -144,7 +144,7 @@ def application_detail(request, project_id, application_id):
 #This is for user to see selected project applications and checkboxes together.
 
 
-def checklist_detail(request, project_id):
+def report(request, project_id):
     if not request.user.is_authenticated:
         return render(request, 'project/login.html')
     else:
@@ -156,12 +156,12 @@ def checklist_detail(request, project_id):
         table = []
 
         for i in range(applicationLength):
-            checkboxLength = len(list(applications[i].checklist))
+            checkboxLength = len(list(checklists))
             for j in range(checkboxLength):
                 table.append([list(checklists)[j], list(
                     applications[i].checklist)[j]])
 
-        return render(request, 'project/checklist_detail.html', {'project': project, 'applications': applications, 'checklists': checklists, 'table': table})
+        return render(request, 'project/report.html', {'project': project, 'applications': applications, 'checklists': checklists, 'table': table})
 
 #This is for creating projects.
 
