@@ -69,7 +69,7 @@
 
     $(document).ready(function () {
 
-        $('#checkButton').click(function () {
+        $('input[type=checkbox]').click(function () {
 
             var checklist = "";
 
@@ -95,10 +95,10 @@
                     'application_id': 1,
                 },
                 success: function () {
-                    alert("Succesfull: " + checklist);
+                    // alert("Succesfull: " + checklist);
                 },
                 error: function () {
-                    alert("Error: " + checklist);
+                    // alert("Error: " + checklist);
                 },
             });
         });

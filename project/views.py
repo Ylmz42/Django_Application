@@ -5,7 +5,6 @@ from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 from .forms import ProjectForm, ApplicationForm, UserForm
 from .models import Project, Application, CheckList
-import sqlite3
 # Create your views here.
 
 # This is home page. When user logs in, the page that will be seen
@@ -245,15 +244,7 @@ def setChecklist(request):
     checklist = request.POST['checklist']
     application_id = request.POST['application_id']
 
-    print(application_id)
-
-    conn = sqlite3.connect('db.sqlite3')
-    c = conn.cursor()
-    c.execute("UPDATE project_application SET checklist = ? WHERE id = ?",
-              (checklist, application_id))
-    conn.commit()
-    c.close()
-    conn.close()
+    Application.objects.filter(id=application_id).update(checklist=checklist)
 
     return HttpResponse('')
 
@@ -262,34 +253,21 @@ def getChecklist(request):
 
     application = Application.objects.filter(id=1)
 
-    print(application)
+    for app in application:
+        print('<p>'+ app.checklist+ '</p>')
+
     return HttpResponse('')
-"""     conn = sqlite3.connect('db.sqlite3')
-    c = conn.cursor()
 
-    c.execute("SELECT checklist FROM project_application WHERE id = ?",
-              (1))
-
-    conn.commit()
-    c.close()
-    conn.close() """
 
 def setReportlist(request):
 
     reportlist = request.POST['reportlist']
     application_id = request.POST['application_id']
 
-    print(application_id)
-
-    conn = sqlite3.connect('db.sqlite3')
-    c = conn.cursor()
-    c.execute("UPDATE project_application SET reportlist = ? WHERE id = ?",
-              (reportlist, application_id))
-    conn.commit()
-    c.close()
-    conn.close()
+    Application.objects.filter(id=application_id).update(reportlist=reportlist)
 
     return HttpResponse('')
+
 
 def getReportlist(request):
 
