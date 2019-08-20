@@ -18,5 +18,8 @@ urlpatterns = [
     url(r'^(?P<project_id>[0-9]+)/delete_project/$',views.delete_project, name='delete_project'),
     url(r'^(?P<project_id>[0-9]+)/create_application/$',views.create_application, name='create_application'),
     url(r'^(?P<project_id>[0-9]+)/delete_application/(?P<application_id>[0-9]+)/$',views.delete_application, name='delete_application'),
-    url(r'^checkbox_check/(?P<application_id>[0-9]+)/$', views.checkbox_check, name='checkbox_check'),
+    url(r'^setChecklist/$', views.setChecklist, name='setChecklist'),
+    url(r'^getChecklist/$', views.getChecklist, name='getChecklist'),
+    url(r'^setReportlist/$', views.setReportlist, name='setReportlist'),
+    url(r'^getReportlist/$', views.getReportlist, name='getReportlist'),
 ]

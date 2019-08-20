@@ -15,53 +15,105 @@
 
                 <div class="panel-body">
                     <div class="table-responsive-sm">
-                        <table class="table table-hover">
+                        <form role="form" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <table class="table table-hover">
 
-                            <thead>
-                                <tr>
-                                    <div class="col-sm-1">
-                                        <th style="width: 5%; text-align: center">#</th>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <th style="width: 20%; text-align: center">Vulnerability</th>
-                                    </div>
-                                    {% for item in applications %}
-                                    <div class="col-sm-2">
-                                        <th style="width: 25%; text-align: center">{{item.name}}</th>
-                                    </div>
+                                <thead>
+                                    <tr>
+                                        <div class="col-sm-1">
+                                            <th style="width: 5%; text-align: center">#</th>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <th style="width: 20%; text-align: center">Vulnerability</th>
+                                        </div>
+                                        {% for item in applications %}
+                                        <div class="col-sm-2">
+                                            <th style="width: 25%; text-align: center">{{item.name}}</th>
+                                        </div>
+                                        {% endfor %}
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {% for check in checklists %}
+                                    <tr>
+                                        <div class="col-sm-1">
+                                            <td style="width: 5%; text-align: center">{{forloop.counter}}</td>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <td style="width: 20%; text-align: center">{{check}}</td>
+                                        </div>
+                                        {% for item in applications %}
+                                        <div class="col-sm-2">
+                                            <td style="width: 25%; text-align: center">
+                                                <input type="checkbox" id="{{item.id}}" name="check"
+                                                    value="{{item.checklist}}">
+                                            </td>
+                                        </div>
+                                        {% endfor %}
+                                    </tr>
                                     {% endfor %}
-                                </tr>
-                            </thead>
+                                </tbody>
 
-                            <tbody>
-                                {% for check in checklists %}
-                                <tr>
-                                    <div class="col-sm-1">
-                                        <td style="width: 5%; text-align: center">{{forloop.counter}}</td>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <td style="width: 20%; text-align: center">{{check}}</td>
-                                    </div>
-                                    {% for item in applications %}
-                                    <div class="col-sm-2">
-                                        <td style="width: 25%; text-align: center">
-                                            <input type="checkbox" id="{{item.id}}" name="check"
-                                                value="{{item.checklist}}">
-                                        </td>
-                                    </div>
-                                    {% endfor %}
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-
-                        </table>
+                            </table>
+                            <input type="button" name="btn" id="reportButton" value="Report">
+                        </form>
                     </div>
                 </div>
+
+                <div id="load_reportlist"></div>
 
             </div>
 
         </div>
     </div>
 </div>
+
+<script>
+
+    $(document).ready(function () {
+
+        $('#reportButton').click(function () {
+
+            var reportlist = "";
+
+            $("input[type=checkbox]").each(function () {
+
+                if (this.checked == true) {
+                    isChecked = "1";
+                }
+                else {
+                    isChecked = "0";
+                }
+                checklist += isChecked;
+            });
+
+            $.ajax({
+
+                url: "/setReportlist/",
+                type: "POST",
+                dataType: "text",
+                data: {
+                    'reportlist': reportlist,
+                    csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
+                    'application_id': 1,
+                },
+                success: function () {
+                    alert("Succesfull: " + reportlist);
+                },
+                error: function () {
+                    alert("Error: " + reportlist);
+                },
+            });
+        });
+
+        setInterval(function () {
+
+            $('#load_reportlist').load("/getReportlist/").fadeIn("slow");
+
+        }, 1000);
+    });
+</script>
 
 {% endblock %}

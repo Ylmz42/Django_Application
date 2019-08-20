@@ -41,7 +41,7 @@ $(function () {
     bs_input_file();
 });
 
-function checkList(checkbox_id, application_id) {
+/* function checkList(checkbox_id, application_id) {
 
     $("#" + checkbox_id.toString()).change(function () {
 
@@ -72,4 +72,4 @@ function checkList(checkbox_id, application_id) {
         });
         console.log("Hello");
     });
-}
+} */

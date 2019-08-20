@@ -240,22 +240,57 @@ def delete_application(request, project_id, application_id):
 #This is for updating database when any of checkbox has changed.
 
 
-def checkbox_check(request, application_id):
+def setChecklist(request):
 
-    if request.method == 'POST':
-        checklist = request.POST['checklist']
+    checklist = request.POST['checklist']
+    application_id = request.POST['application_id']
 
-        application = get_object_or_404(Application, pk=application_id)
-        application.checklist = checklist
+    print(application_id)
 
-        print(checklist)
+    conn = sqlite3.connect('db.sqlite3')
+    c = conn.cursor()
+    c.execute("UPDATE project_application SET checklist = ? WHERE id = ?",
+              (checklist, application_id))
+    conn.commit()
+    c.close()
+    conn.close()
 
-        conn = sqlite3.connect('db.sqlite3')
-        c = conn.cursor()
-        c.execute("UPDATE project_application SET checklist = ? WHERE id = ?",
-                  (checklist, application_id))
-        conn.commit()
-        c.close()
-        conn.close()
+    return HttpResponse('')
 
-        return HttpResponse('')
+
+def getChecklist(request):
+
+    application = Application.objects.filter(id=1)
+
+    print(application)
+    return HttpResponse('')
+"""     conn = sqlite3.connect('db.sqlite3')
+    c = conn.cursor()
+
+    c.execute("SELECT checklist FROM project_application WHERE id = ?",
+              (1))
+
+    conn.commit()
+    c.close()
+    conn.close() """
+
+def setReportlist(request):
+
+    reportlist = request.POST['reportlist']
+    application_id = request.POST['application_id']
+
+    print(application_id)
+
+    conn = sqlite3.connect('db.sqlite3')
+    c = conn.cursor()
+    c.execute("UPDATE project_application SET reportlist = ? WHERE id = ?",
+              (reportlist, application_id))
+    conn.commit()
+    c.close()
+    conn.close()
+
+    return HttpResponse('')
+
+def getReportlist(request):
+
+    return HttpResponse('')

@@ -15,10 +15,8 @@
 
                 <div class="panel-body">
                     <div class="table-responsive-sm">
-                        <form role="form" method="POST" enctype="multipart/form-data"
-                            action="{% url 'project:checkbox_check' application.id %}">
+                        <form role="form" method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
-
                             <table class="table table-hover">
 
                                 <thead>
@@ -47,8 +45,7 @@
                                         <div class="col-sm-3">
                                             <td style="width: 30%; text-align: center">
                                                 <input type="checkbox" id="{{item.0.id}}" name="check"
-                                                    value="{{item.1}}"
-                                                    onclick="checkList({{item.0.id}}, {{application.id}})">
+                                                    value="{{item.1}}">
                                             </td>
                                         </div>
                                     </tr>
@@ -56,32 +53,62 @@
                                 </tbody>
 
                             </table>
+
+                            <input type="button" name="btn" id="checkButton" value="Check">
                         </form>
                     </div>
                 </div>
-
+                <div id="load_checklist"></div>
             </div>
 
         </div>
     </div>
 </div>
 
+<script>
+
+    $(document).ready(function () {
+
+        $('#checkButton').click(function () {
+
+            var checklist = "";
+
+            $("input[type=checkbox]").each(function () {
+
+                if (this.checked == true) {
+                    isChecked = "1";
+                }
+                else {
+                    isChecked = "0";
+                }
+                checklist += isChecked;
+            });
+
+            $.ajax({
+
+                url: "/setChecklist/",
+                type: "POST",
+                dataType: "text",
+                data: {
+                    'checklist': checklist,
+                    csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
+                    'application_id': 1,
+                },
+                success: function () {
+                    alert("Succesfull: " + checklist);
+                },
+                error: function () {
+                    alert("Error: " + checklist);
+                },
+            });
+        });
+
+        setInterval(function () {
+
+            $('#load_checklist').load("/getChecklist/").fadeIn("slow");
+
+        }, 1000);
+    });
+</script>
+
 {% endblock %}
-
-<!--             <form method="POST" action="{% url "project:index" %}" enctype="multipart/form-data">
-                {% csrf_token %}
-
-                <div class="form-group">
-                    <div class="input-group input-file" name="Fichier1">
-                        <input type="text" class="form-control" placeholder='Choose a file...' />
-                        <span class="input-group-btn">
-                            <button class="btn btn-default btn-choose" type="button">Choose</button>
-                        </span>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
-                    <button type="reset" class="btn btn-danger">Reset</button>
-                </div>
-            </form> -->
