@@ -47,7 +47,7 @@
                                         {% for item in applications %}
                                         <div class="col-sm-2">
                                             <td style="width: 25%; text-align: center">
-                                                <input type="checkbox" class="{{item.id}}" name="{{item.reported}}"
+                                                <input type="checkbox" id="{{item.id}}{{check.id}}" class="{{item.id}}" name="{{item.reported}}"
                                                     value="{{item.checklist}}">
                                             </td>
                                         </div>
@@ -80,9 +80,11 @@
 
     $(document).ready(function () {
 
+        var checklist = "";
+
         $('input[type=checkbox]').click(function () {
 
-            var reportlist = "";
+            checklist = "";
 
             $("input[type=checkbox]").each(function () {
 
@@ -101,22 +103,50 @@
                 type: "POST",
                 dataType: "text",
                 data: {
-                    'reportlist': reportlist,
+                    'checklist': checklist,
                     csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
                     'application_id': 1,
                 },
-                success: function () {
-                    alert("Succesfull: " + reportlist);
+                success: function (data) {
+                    // alert("Succesfull: " + data);
                 },
-                error: function () {
-                    alert("Error: " + reportlist);
+                error: function (data) {
+                    // alert("Error: " + checklist);
                 },
             });
         });
 
         setInterval(function () {
 
-            $('#load_reportlist').load("/getReportlist/").fadeIn("slow");
+            $.ajax({
+
+                url: "/getReportlist/",
+                type: "GET",
+                dataType: "JSON",
+                data: {
+                    'project_id': {{project.id}},
+                },
+                success: function (data) {
+
+                    for(var i=0; i<data.appLength; i++){
+
+                        for (var j = 0; j < data.checklistLength; j++) {
+
+                            var checkBox = document.getElementById(application_id[i] * 10 + (j + 1));
+
+                            if ((data.report)[(i * 10) + j] == "1") {
+                                checkBox.checked = true;
+                            }
+                            else {
+                                checkBox.checked = false;
+                            }
+                        }
+                    }
+                },
+                error: function (data) {
+                    // alert("Error: " + checklist);
+                },
+            });
 
         }, 1000);
     });

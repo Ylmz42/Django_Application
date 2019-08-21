@@ -98,47 +98,47 @@
                 data: {
                     'checklist': checklist,
                     csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
-                    'application_id': {{ application.id }},
+                    'application_id': {{application.id}},
                 },
-        success: function (data) {
-            // alert("Succesfull: " + data);
-        },
-        error: function (data) {
-            // alert("Error: " + checklist);
-        },
+                success: function (data) {
+                    // alert("Succesfull: " + data);
+                },
+                error: function (data) {
+                    // alert("Error: " + checklist);
+                },
             });
         });
 
-    setInterval(function () {
+        setInterval(function () {
 
-        $.ajax({
+            $.ajax({
 
-            url: "/getChecklist/",
-            type: "GET",
-            dataType: "JSON",
-            data: {
-                'application_id': {{ application.id }},
-            },
-        success: function (data) {
+                url: "/getChecklist/",
+                type: "GET",
+                dataType: "JSON",
+                data: {
+                    'application_id': {{application.id}},
+                },
+                success: function (data) {
+                    
+                    for (var i = 0; i < (data.check).length; i++) {
 
-            for (var i = 0; i < (data.check).length; i++) {
+                        var checkBox = document.getElementById((i+1).toString());
 
-                var checkBox = document.getElementById(i + 1)
+                        if ((data.check)[i] == "1") {
+                            checkBox.checked = true;
+                        }
+                        else {
+                            checkBox.checked = false;
+                        }
+                    }
+                },
+                error: function (data) {
+                    // alert("Error: " + checklist);
+                },
+            });
 
-                if ((data.check)[i] == "1") {
-                    checkBox.checked = true;
-                }
-                else {
-                    checkBox.checked = false;
-                }
-            }
-        },
-        error: function (data) {
-            // alert("Error: " + checklist);
-        },
-        });
-
-    }, 1000);
+        }, 1000);
     });
 
 </script>

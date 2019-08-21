@@ -251,15 +251,15 @@ def setChecklist(request):
 
 def getChecklist(request):
 
-    app_id = request.GET.get("application_id")
-    application = Application.objects.filter(id=app_id)
+    application_id = request.GET.get("application_id")
+    application = Application.objects.filter(id=application_id)
     check = ""
 
     for app in application:
         check += app.checklist
 
     data = {
-        'check': check
+        'check': check,
     }
 
     return JsonResponse(data)
@@ -277,4 +277,29 @@ def setReportlist(request):
 
 def getReportlist(request):
 
-    return HttpResponse('')
+    project_id = request.GET.get("project_id")
+    applications = Application.objects.filter(project_id=project_id)
+    checklists = CheckList.objects.all()
+
+    report = ""
+    application_id = []
+    appLength = len(applications)
+    checklistLength = len(checklists)
+
+    for app in applications:
+        report += app.reported
+        application_id.append(app.id)
+
+    print(report)
+    print(appLength)
+    print(checklistLength)
+    print(application_id)
+
+    data = {
+        'report': report,
+        'appLength': appLength,
+        'checklistLength': checklistLength,
+        'application_id': application_id,
+    }
+
+    return JsonResponse(data)
