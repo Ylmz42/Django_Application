@@ -80,11 +80,11 @@
 
     $(document).ready(function () {
 
-        var checklist = "";
+        var reportlist = "";
 
         $('input[type=checkbox]').click(function () {
 
-            checklist = "";
+            reportlist = "";
 
             $("input[type=checkbox]").each(function () {
 
@@ -94,7 +94,7 @@
                 else {
                     isChecked = "0";
                 }
-                checklist += isChecked;
+                reportlist += isChecked;
             });
 
             $.ajax({
@@ -103,9 +103,9 @@
                 type: "POST",
                 dataType: "text",
                 data: {
-                    'checklist': checklist,
+                    'reportlist': reportlist,
                     csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
-                    'application_id': 1,
+                    'project_id': {{project.id}},
                 },
                 success: function (data) {
                     // alert("Succesfull: " + data);
@@ -157,7 +157,7 @@
                 },
             });
 
-        }, 1000);
+        }, 100000);
     });
 
 </script>
