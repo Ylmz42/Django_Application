@@ -71,9 +71,11 @@
 
     $(document).ready(function () {
 
+        var checklist = "";
+
         $('input[type=checkbox]').click(function () {
 
-            var checklist = "";
+            checklist = "";
 
             $("input[type=checkbox]").each(function () {
 
@@ -96,10 +98,10 @@
                     csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
                     'application_id': 1,
                 },
-                success: function () {
-                    // alert("Succesfull: " + checklist);
+                success: function (data) {
+                    // alert("Succesfull: " + data);
                 },
-                error: function () {
+                error: function (data) {
                     // alert("Error: " + checklist);
                 },
             });
@@ -107,10 +109,26 @@
 
         setInterval(function () {
 
-            $('#load_checklist').load("/getChecklist/").fadeIn("slow");
+            $.ajax({
 
-        }, 1000);
+                url: "/getChecklist/",
+                type: "GET",
+                dataType: "JSON",
+                data: {
+                    'checklist': checklist,
+                },
+                success: function (data) {
+                    
+                    alert(data.check);
+                },
+                error: function (data) {
+                    // alert("Error: " + checklist);
+                },
+            });
+
+        }, 5000);
     });
+
 </script>
 
 {% endblock %}

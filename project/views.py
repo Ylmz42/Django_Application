@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 from .forms import ProjectForm, ApplicationForm, UserForm
@@ -252,11 +252,16 @@ def setChecklist(request):
 def getChecklist(request):
 
     application = Application.objects.filter(id=1)
+    check = ""
 
     for app in application:
-        print('<p>'+ app.checklist+ '</p>')
+        check += app.checklist
 
-    return HttpResponse('')
+    data = {
+        'check': check
+    }
+
+    return JsonResponse(data)
 
 
 def setReportlist(request):
