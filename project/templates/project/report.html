@@ -130,9 +130,18 @@
 
                     for(var i=0; i<data.appLength; i++){
 
-                        for (var j = 0; j < data.checklistLength; j++) {
+                        var checkBoxId = "";
 
-                            var checkBox = document.getElementById(application_id[i] * 10 + (j + 1));
+                        for (var j = 0; j < data.checklistLength; j++) {
+                            
+                            var text1 = ((data.application_id)[i] * 10).toString();
+                            var text2 = (j + 1).toString();
+
+                            checkBoxId = text1.concat("", text2);
+
+                            console.log(checkBoxId);
+                            
+                            var checkBox = document.getElementById(checkBoxId.toString());
 
                             if ((data.report)[(i * 10) + j] == "1") {
                                 checkBox.checked = true;
