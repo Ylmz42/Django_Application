@@ -251,7 +251,8 @@ def setChecklist(request):
 
 def getChecklist(request):
 
-    application = Application.objects.filter(id=1)
+    app_id = request.GET.get("application_id")
+    application = Application.objects.filter(id=app_id)
     check = ""
 
     for app in application:
