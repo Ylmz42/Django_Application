@@ -59,13 +59,15 @@
                     </div>
                 </div>
 
-                <div id="load_checklist"></div>
-
             </div>
 
         </div>
     </div>
 </div>
+
+{% for item in table %}
+<script>checkBoxChecked({{ item.0.id }})</script>
+{% endfor %}
 
 <script>
 
@@ -118,15 +120,22 @@
                     'checklist': checklist,
                 },
                 success: function (data) {
-                    
-                    alert(data.check);
+                    for (var i = 0; i < (data.check).length; i++) {
+                        var checkBox = document.getElementById(i + 1)
+                        if ((data.check)[i] == "1") {
+                            checkBox.checked = true;
+                        }
+                        else {
+                            checkBox.checked = false;
+                        }
+                    }
                 },
                 error: function (data) {
                     // alert("Error: " + checklist);
                 },
             });
 
-        }, 5000);
+        }, 1000);
     });
 
 </script>
