@@ -120,8 +120,11 @@
                     'checklist': checklist,
                 },
                 success: function (data) {
+
                     for (var i = 0; i < (data.check).length; i++) {
+
                         var checkBox = document.getElementById(i + 1)
+
                         if ((data.check)[i] == "1") {
                             checkBox.checked = true;
                         }

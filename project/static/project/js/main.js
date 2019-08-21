@@ -35,6 +35,25 @@ function checkBoxChecked(item_id) {
     }
 }
 
+function isChecklistChecked(app_id) {
+
+    var checkBox = document.getElementsByClassName(app_id);
+    for (var i = 0; i < checkBox.length; i++) {
+        if (checkBox[i].value[i] == "1") {
+            checkBox[i].disabled = false;
+            if (checkBox[i].name[i] == "1") {
+                checkBox[i].checked = true;
+            }
+            else {
+                checkBox[i].checked = false;
+            }
+        }
+        else {
+            checkBox[i].disabled = true;
+        }
+    }
+}
+
 $(function () {
     bs_input_file();
 });
