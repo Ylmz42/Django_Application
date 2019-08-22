@@ -13,7 +13,14 @@
       <div class="panel panel-default">
 
         <div class="panel-heading">
-          <h3><a href="#{{project.id}}" data-toggle="collapse">{{project.name}}</a></h3>
+          <div class="row">
+            <div class="col-sm-8">
+              <h3><a href="#{{project.id}}" data-toggle="collapse">{{project.name}}</a></h3>
+            </div>
+            <div class="col-sm-4">
+              <h3> {{project.situation}}</h3>
+            </div>
+          </div>
         </div>
 
         <div id="{{project.id}}" class="collapse">

@@ -19,71 +19,76 @@
                 <div class="panel-body">
                     <div class="table-responsive-sm">
                         <table class="table table-hover">
+
                             <thead>
                                 <tr>
                                     <div class="col-sm-1">
-                                        <th style="width:5%; text-align: center"></th>
+                                        <th style="width:2%"></th>
                                     </div>
                                     <div class="col-sm-1">
-                                        <th style="width:5%; text-align: center">#</th>
+                                        <th style="width:3%">#</th>
                                     </div>
                                     <div class="col-sm-2">
-                                        <th style="width:15%; text-align: center">Name</th>
+                                        <th style="width:21%">Name</th>
                                     </div>
                                     <div class="col-sm-2">
-                                        <th style="width:15%; text-align: center">Access</th>
+                                        <th style="width:15%">Access</th>
                                     </div>
                                     <div class="col-sm-1">
-                                        <th style="width:15%; text-align: center">Users</th>
+                                        <th style="width:15%">Users</th>
                                     </div>
                                     <div class="col-sm-2">
-                                        <th style="width:30%; text-align: center">Notes</th>
+                                        <th style="width:40%">Notes</th>
                                     </div>
                                     <div class="col-sm-1">
-                                        <th style="width:15%; text-align: center">Completed</th>
+                                        <th style="width:4%"></th>
                                     </div>
                                 </tr>
                             </thead>
-                            {% for application in applications %}
-                            {% if application.project.id == project.id %}
+
                             <tbody>
+
+                                {% for application in applications %}
+                                {% if application.project.id == project.id %}
+
                                 <tr>
                                     <div class="col-sm-1">
-                                        <td style="width:5%; text-align: center">
+                                        <td style="width:2%">
                                             <a href="{% url 'project:delete_application' project.id application.id %}"
-                                                class="btn btn-danger btn-sm"
-                                                style="background-color: red; border: none">
-                                                <span class="glyphicon glyphicon-remove-sign"
-                                                    style="background-color: red"></span>
-                                            </a>
-                                        </td>
-                                    </div>
-                                    <div class="col-sm-1">
-                                        <td style="width:5%; text-align: center">{{forloop.counter}}</td>
+                                                class="btn btn-danger btn-sm" style="border: none">
+                                                <span class="glyphicon glyphicon-remove-sign""></span>
+                                                </a>
+                                              </td>
+                                            </div>
+                                            <div class=" col-sm-1">
+                                        <td style="width:3%">100</td>
                                     </div>
                                     <div class="col-sm-2">
-                                        <td style="width:15%; text-align: center">
+                                        <td style="width:21%">
                                             <a href="{% url 'project:application_detail' project.id application.id %}">
                                                 {{application.name}}
                                             </a>
                                         </td>
                                     </div>
                                     <div class="col-sm-2">
-                                        <td style="width:15%; text-align: center">{{application.access}}</td>
+                                        <td style="width:15%">{{application.access}}</td>
                                     </div>
                                     <div class="col-sm-1">
-                                        <td style="width:15%; text-align: center">{{application.username}}</td>
+                                        <td style="width:15%">{{application.username}}</td>
                                     </div>
                                     <div class="col-sm-2">
-                                        <td style="width:30%; text-align: center">{{application.notes}}</td>
+                                        <td style="width:40%">{{application.notes}}</td>
                                     </div>
                                     <div class="col-sm-1">
-                                        <td style="width:15%; text-align: center">70 %</td>
+                                        <td style="width:4%">100 %</td>
                                     </div>
                                 </tr>
+
+                                {% endif %}
+                                {% endfor %}
+
                             </tbody>
-                            {% endif %}
-                            {% endfor %}
+
                         </table>
                         <a href="{% url 'project:create_application' project.id %}" class="btn btn-success btn-sm"
                             style="border:none">
