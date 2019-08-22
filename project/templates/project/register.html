@@ -5,25 +5,34 @@
 {% block body %}
 
 <div class="container-fluid">
-  <div class="row" style="margin: auto">
+  <div class="row">
     <div class="col-sm-6 col-sm-offset-3">
 
       <div class="panel-group">
         <div class="panel panel-default">
 
           <div class="panel-heading">
-            <h3>Register</h3>
+            <div class="row">
+
+              <div class="col-sm-12">
+                <h3>Register</h3>
+              </div>
+
+            </div>
           </div>
 
           <div class="panel-body">
-            {% if error_message %}
 
-            <p>
-              <strong>{{error_message}}</strong>
-            </p>
+            {% if error_message %}
+            <div class="row">
+              <div class="col-sm-12">
+                <p>
+                  <strong>{{error_message}}</strong>
+                </p>
+              </div>
+            </div>
 
             {% else %}
-
             <form class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
               {% csrf_token %}
               {% include 'project/form_template.html' %}
@@ -40,9 +49,13 @@
           </div>
 
           <div class="panel-footer">
-            <p>
-              Already have an account? <a href="{% url 'project:login_user' %}">Click here</a> to log in.
-            </p>
+            <div class="row">
+              <div class="col-sm-12">
+                <p>
+                  Already have an account? <a href="{% url 'project:login_user' %}">Click here</a> to log in.
+                </p>
+              </div>
+            </div>
           </div>
 
         </div>

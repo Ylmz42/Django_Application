@@ -1,5 +1,5 @@
 {% extends 'project/base.html' %}
-{% block title %}{{project.name}}'s Checklist{% endblock %}
+{% block title %}{{project.name}}'s Report{% endblock %}
 
 {% block body %}
 
@@ -10,59 +10,68 @@
             <div class="panel panel-default">
 
                 <div class="panel-heading">
-                    <h3>{{project.name}} --> Report</h3>
+                    <div class="row">
+
+                        <div class="col-sm-10">
+                            <h3>{{project.name}}'s Report</h3>
+                        </div>
+
+                    </div>
                 </div>
 
                 <div class="panel-body">
-                    <div class="table-responsive-sm">
-                        <form role="form" method="POST" enctype="multipart/form-data">
-                            {% csrf_token %}
+
+                    <form role="form" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="table-responsive-sm">
                             <table class="table table-hover">
 
                                 <thead>
                                     <tr>
-                                        <div class="col-sm-1">
-                                            <th style="width: 3%">#</th>
-                                        </div>
-                                        <div class="col-sm-1">
-                                            <th style="width: 5%">Vulnerability</th>
-                                        </div>
-                                        {% for item in applications %}
-                                        <div class="col-sm-2">
-                                            <th style="width: 25%">{{item.name}}</th>
-                                        </div>
+                                        <th style="width: 10%">
+                                            <div class="col-sm-1">#</div>
+                                        </th>
+                                        <th style="width: 10%">
+                                            <div class="col-sm-1">Vulnerability</div>
+                                        </th>
+                                        {% for application in applications %}
+                                        <th style="width: 10%">
+                                            <div class="col-sm-1">{{application.name}}</div>
+                                        </th>
                                         {% endfor %}
                                     </tr>
                                 </thead>
 
                                 <tbody>
-                                    {% for check in checklists %}
+                                    {% for checklist in checklists %}
                                     <tr>
-                                        <div class="col-sm-1">
-                                            <td style="width: 3%">{{forloop.counter}}</td>
-                                        </div>
-                                        <div class="col-sm-1">
-                                            <td style="width: 5%">{{check}}</td>
-                                        </div>
-                                        {% for item in applications %}
-                                        <div class="col-sm-2">
-                                            <td style="width: 25%">
-                                                <input type="checkbox" id="a_id{{item.id}} + c_id{{check.id}}" class="{{item.id}}" name="{{item.reported}}"
-                                                    value="{{item.checklist}}">
-                                            </td>
-                                        </div>
+                                        <td style="width: 10%">
+                                            <div class="col-sm-1">{{forloop.counter}}</div>
+                                        </td>
+                                        <td style="width: 10%">
+                                            <div class="col-sm-1">{{checklist}}</div>
+                                        </td>
+                                        {% for application in applications %}
+                                        <td style="width: 25%">
+                                            <div class="col-sm-1">
+                                                <input type="checkbox"
+                                                    id="a_id{{application.id}} + c_id{{checklist.id}}"
+                                                    class="{{application.id}}" name="{{application.reported}}"
+                                                    value="{{application.checklist}}">
+                                            </div>
+                                        </td>
                                         {% endfor %}
                                     </tr>
                                     {% endfor %}
                                 </tbody>
 
                             </table>
+                        </div>
 
-                        </form>
-                    </div>
+                    </form>
+
                 </div>
-
-                <div id="load_reportlist"></div>
 
             </div>
 
@@ -70,14 +79,11 @@
     </div>
 </div>
 
-{% for item in applications %}
-
-<script>isChecklistChecked({{ item.id }})</script>
-
+{% for application in applications %}
+    <script>isChecklistChecked({{ application.id }})</script>
 {% endfor %}
 
 <script>
-
     $(document).ready(function () {
 
         var reportlist = "";
@@ -157,7 +163,6 @@
 
         }, 1000);
     });
-
 </script>
 
 {% endblock %}
