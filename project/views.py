@@ -306,7 +306,6 @@ def getReportlist(request):
         report += app.reported
         application_id.append(app.id)
 
-    print(report)
     data = {
         'report': report,
         'appLength': appLength,

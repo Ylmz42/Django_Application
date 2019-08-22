@@ -47,7 +47,7 @@
                                         {% for item in applications %}
                                         <div class="col-sm-2">
                                             <td style="width: 25%; text-align: center">
-                                                <input type="checkbox" id="{{item.id}}{{check.id}}" class="{{item.id}}" name="{{item.reported}}"
+                                                <input type="checkbox" id="a_id{{item.id}} + c_id{{check.id}}" class="{{item.id}}" name="{{item.reported}}"
                                                     value="{{item.checklist}}">
                                             </td>
                                         </div>
@@ -134,14 +134,12 @@
 
                         for (var j = 0; j < data.checklistLength; j++) {
                             
-                            var text1 = ((data.application_id)[i] * 10).toString();
-                            var text2 = (j + 1).toString();
+                            var firstString = "a_id".concat((data.application_id[i]).toString());
+                            var lastString = " + c_id".concat((j+1).toString());
 
-                            checkBoxId = text1.concat("", text2);
-
-                            console.log(checkBoxId);
+                            checkBoxId = firstString.concat(lastString);
                             
-                            var checkBox = document.getElementById(checkBoxId.toString());
+                            var checkBox = document.getElementById(checkBoxId);
 
                             if ((data.report)[(i * 10) + j] == "1") {
                                 checkBox.checked = true;
