@@ -271,9 +271,22 @@ def setReportlist(request):
     project_id = request.POST['project_id']
 
     applications = Application.objects.filter(project_id=project_id)
+    checklists = CheckList.objects.all()
 
+    reported = []
+
+    for i in range(len(applications)):
+        report = ""
+        for j in range(len(checklists)):
+            report += reportlist[i + (len(applications) * j)]
+        reported.append(report)
+
+    print(reported)
+
+    count = 0
     for app in applications:
-        Application.objects.filter(id=app.id).update(reported=reportlist)
+        Application.objects.filter(id=app.id).update(reported=reported[count])
+        count += 1
 
     return HttpResponse('')
 
@@ -293,6 +306,7 @@ def getReportlist(request):
         report += app.reported
         application_id.append(app.id)
 
+    print(report)
     data = {
         'report': report,
         'appLength': appLength,
