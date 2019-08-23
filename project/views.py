@@ -35,6 +35,7 @@ def projects(request):
     if not request.user.is_authenticated:  # Does user log in?
         return render(request, 'project/login.html')
     else:
+        # BURAYA KULLANICININ YETKİLİ OLDUĞU PROJELER GELECEK.
         projects = Project.objects.all()  # Getter all projects
         return render(request, 'project/projects.html', {'projects': projects})
 
@@ -46,8 +47,10 @@ def applications(request):
         return render(request, 'project/login.html')
     else:
         projects = Project.objects.all()  # Getter all projects
+        applications = Application.objects.all()
         # Getter all applications that related with users who logged in
-        applications = Application.usernameInApp(request)
+        # BURAYA KULLANICIN YETKİLİ OLDUĞU PROJELER VE UYGULAMALAR LİSTESİ GELECEK.
+        #applications = Application.usernameInApp(request)
         return render(request, 'project/applications.html', {'projects': projects, 'applications': applications})
 
 # This is register page
