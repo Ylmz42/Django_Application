@@ -112,19 +112,24 @@ def logout_user(request):
 # This is project_detail page
 # project_id is the project unique id
 
+# BURAYI SADECE PROJEDEKI YETKILI KISILER GOREBILECEK
+
 
 def project_detail(request, project_id):
     if not request.user.is_authenticated:  # Does user log in?
         return render(request, 'project/login.html')
     else:
+        #BURAYA KULLANICININ YETKİLİ OLDUĞU UYGULAMALAR GELECEK.
         project = get_object_or_404(Project, pk=project_id)
-        applications = Application.objects.all().filter(project_id=project.id)
+        applications = Application.objects.filter(project_id=project.id)
 
         return render(request, 'project/project_detail.html', {'project': project, 'applications': applications})
 
 # This is applications_detail page
 # project_id is the project unique id
 # application_id is the application unique id
+
+# BURAYI SADECE UYGULAMAYA YETKILI KISILER GOREBILECEK
 
 
 def application_detail(request, project_id, application_id):
@@ -135,15 +140,17 @@ def application_detail(request, project_id, application_id):
         application = get_object_or_404(Application, pk=application_id)
         checklists = CheckList.objects.all()
 
-        checkboxLength = len(list(application.checklist))
+        checkboxLength = len(checklists)
         table = []
 
         for i in range(checkboxLength):
             table.append([list(checklists)[i], list(application.checklist)[i]])
 
-        return render(request, 'project/application_detail.html', {'project': project, 'application': application, 'checklists': checklists, 'checkboxLength': checkboxLength, 'table': table})
+        return render(request, 'project/application_detail.html', {'project': project, 'application': application, 'table': table})
 
 #This is for user to see selected project applications and checkboxes together.
+
+# BURAYI PROJEYE YETKILI KISILER GOREBILECEK VE PROJEDE YETKILI OLDUGU UYGULAMALAR GOSTERILECEK
 
 
 def report(request, project_id):
@@ -154,16 +161,7 @@ def report(request, project_id):
         applications = Application.objects.filter(project_id=project.id)
         checklists = CheckList.objects.all()
 
-        applicationLength = len(list(applications))
-        table = []
-
-        for i in range(applicationLength):
-            checkboxLength = len(list(checklists))
-            for j in range(checkboxLength):
-                table.append([list(checklists)[j], list(
-                    applications[i].checklist)[j]])
-
-        return render(request, 'project/report.html', {'project': project, 'applications': applications, 'checklists': checklists, 'table': table})
+        return render(request, 'project/report.html', {'project': project, 'applications': applications, 'checklists': checklists})
 
 #This is for creating projects.
 
@@ -184,7 +182,10 @@ def create_project(request):
             }
             return render(request, 'project/create_project.html', context)
         else:
-            return render(request, 'project/index.html')
+            projects = Project.objects.all()
+            applications = Application.objects.all()
+
+            return render(request, 'project/index.html', {'projects': projects, 'applications': applications})
 
 #This is for deleting projects.
 
@@ -193,12 +194,16 @@ def delete_project(request, project_id):
     if not request.user.is_authenticated:
         return render(request, 'project/login.html')
     else:
+        projects = Project.objects.all()
+        applications = Application.objects.all()
+
         if request.user.is_superuser:
             project = get_object_or_404(Project, pk=project_id)
             project.delete()
-            return render(request, 'project/index.html')
+
+            return render(request, 'project/index.html', {'projects': projects, 'applications': applications})
         else:
-            return render(request, 'project/index.html')
+            return render(request, 'project/index.html', {'projects': projects, 'applications': applications})
 
 #This is for creating application.
 
@@ -211,8 +216,8 @@ def create_application(request, project_id):
             form = ApplicationForm(request.POST or None)
             project = get_object_or_404(Project, pk=project_id)
             if form.is_valid():
-                applications = Application.objects.all()
-                for apps in applications:
+                Applications = Application.objects.all()
+                for apps in Applications:
                     if apps.name == form.cleaned_data.get("name"):
                         context = {
                             'project': project,
@@ -223,13 +228,17 @@ def create_application(request, project_id):
                 application = form.save(commit=False)
                 # User can only create projects that project's user is itself.
                 application.project = project
-                c = CheckList.objects.all()
-                cstr = ''
-                for a in c:
-                    cstr = cstr+'0'
-                application.checklist = cstr
-                application.reported = cstr
+
+                checklists = CheckList.objects.all()
+                checklist = ''
+
+                for check in checklists:
+                    checklist = checklist+'0'
+
+                application.checklist = checklist
+                application.reported = checklist
                 application.save()
+                
                 return render(request, 'project/project_detail.html', {'project': project})
             context = {
                 'project': project,
@@ -237,7 +246,10 @@ def create_application(request, project_id):
             }
             return render(request, 'project/create_application.html', context)
         else:
-            return render(request, 'project/index.html')
+            projects = Project.objects.all()
+            applications = Application.objects.all()
+
+            return render(request, 'project/index.html', {'projects': projects, 'applications': applications})
 
 #This is for deleting application.
 
