@@ -254,77 +254,85 @@ def delete_application(request, project_id, application_id):
 
 
 def setChecklist(request):
+    if not request.user.is_authenticated:
+        return render(request, 'project/login.html')
+    else:
+        checklist = request.POST['checklist']
+        application_id = request.POST['application_id']
 
-    checklist = request.POST['checklist']
-    application_id = request.POST['application_id']
+        Application.objects.filter(
+            id=application_id).update(checklist=checklist)
 
-    Application.objects.filter(id=application_id).update(checklist=checklist)
-
-    return HttpResponse('')
+        return HttpResponse('')
 
 
 def getChecklist(request):
+    if not request.user.is_authenticated:
+        return render(request, 'project/login.html')
+    else:
+        application_id = request.GET.get("application_id")
+        application = Application.objects.filter(id=application_id)
+        check = ""
 
-    application_id = request.GET.get("application_id")
-    application = Application.objects.filter(id=application_id)
-    check = ""
+        for app in application:
+            check += app.checklist
 
-    for app in application:
-        check += app.checklist
+        data = {
+            'check': check,
+        }
 
-    data = {
-        'check': check,
-    }
-
-    return JsonResponse(data)
+        return JsonResponse(data)
 
 
 def setReportlist(request):
+    if not request.user.is_authenticated:
+        return render(request, 'project/login.html')
+    else:
+        reportlist = request.POST['reportlist']
+        project_id = request.POST['project_id']
 
-    reportlist = request.POST['reportlist']
-    project_id = request.POST['project_id']
+        applications = Application.objects.filter(project_id=project_id)
+        checklists = CheckList.objects.all()
 
-    applications = Application.objects.filter(project_id=project_id)
-    checklists = CheckList.objects.all()
+        reported = []
 
-    reported = []
+        for i in range(len(applications)):
+            report = ""
+            for j in range(len(checklists)):
+                report += reportlist[i + (len(applications) * j)]
+            reported.append(report)
 
-    for i in range(len(applications)):
-        report = ""
-        for j in range(len(checklists)):
-            report += reportlist[i + (len(applications) * j)]
-        reported.append(report)
+        count = 0
+        for app in applications:
+            Application.objects.filter(id=app.id).update(
+                reported=reported[count])
+            count += 1
 
-    print(reported)
-
-    count = 0
-    for app in applications:
-        Application.objects.filter(id=app.id).update(reported=reported[count])
-        count += 1
-
-    return HttpResponse('')
+        return HttpResponse('')
 
 
 def getReportlist(request):
+    if not request.user.is_authenticated:
+        return render(request, 'project/login.html')
+    else:
+        project_id = request.GET.get("project_id")
+        applications = Application.objects.filter(project_id=project_id)
+        checklists = CheckList.objects.all()
 
-    project_id = request.GET.get("project_id")
-    applications = Application.objects.filter(project_id=project_id)
-    checklists = CheckList.objects.all()
+        report = ""
+        application_id = []
+        appLength = len(applications)
+        checklistLength = len(checklists)
 
-    report = ""
-    application_id = []
-    appLength = len(applications)
-    checklistLength = len(checklists)
+        for app in applications:
+            report += app.reported
+            application_id.append(app.id)
 
-    for app in applications:
-        report += app.reported
-        application_id.append(app.id)
+        data = {
+            'report': report,
+            'appLength': appLength,
+            'checklistLength': checklistLength,
+            'application_id': application_id,
+        }
 
-    data = {
-        'report': report,
-        'appLength': appLength,
-        'checklistLength': checklistLength,
-        'application_id': application_id,
-    }
-
-    return JsonResponse(data)
+        return JsonResponse(data)
