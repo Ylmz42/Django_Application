@@ -283,8 +283,7 @@ def setChecklist(request):
         checklist = request.POST['checklist']
         application_id = request.POST['application_id']
 
-        Application.objects.filter(
-            id=application_id).update(checklist=checklist)
+        Application.objects.filter(id=application_id).update(checklist=checklist)
 
         return HttpResponse('')
 
@@ -327,8 +326,7 @@ def setReportlist(request):
 
         count = 0
         for app in applications:
-            Application.objects.filter(id=app.id).update(
-                reported=reported[count])
+            Application.objects.filter(id=app.id).update(reported=reported[count])
             count += 1
 
         return HttpResponse('')
