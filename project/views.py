@@ -169,16 +169,19 @@ def create_project(request):
     if not request.user.is_authenticated:
         return render(request, 'project/login.html')
     else:
-        form = ProjectForm(request.POST or None)
-        if form.is_valid():
-            project = form.save(commit=False)
-            project.user = request.user
-            project.save()
-            return render(request, 'project/project_detail.html', {'project': project})
-        context = {
-            "form": form,
-        }
-    return render(request, 'project/create_project.html', context)
+        if request.user.is_superuser:
+            form = ProjectForm(request.POST or None)
+            if form.is_valid():
+                project = form.save(commit=False)
+                project.user = request.user
+                project.save()
+                return render(request, 'project/project_detail.html', {'project': project})
+            context = {
+                "form": form,
+            }
+            return render(request, 'project/create_project.html', context)
+        else:
+            return render(request, 'project/index.html')
 
 #This is for deleting projects.
 
@@ -187,9 +190,12 @@ def delete_project(request, project_id):
     if not request.user.is_authenticated:
         return render(request, 'project/login.html')
     else:
-        project = get_object_or_404(Project, pk=project_id)
-        project.delete()
-        return render(request, 'project/index.html')
+        if request.user.is_superuser:
+            project = get_object_or_404(Project, pk=project_id)
+            project.delete()
+            return render(request, 'project/index.html')
+        else:
+            return render(request, 'project/index.html')
 
 #This is for creating application.
 
@@ -198,44 +204,52 @@ def create_application(request, project_id):
     if not request.user.is_authenticated:
         return render(request, 'project/login.html')
     else:
-        form = ApplicationForm(request.POST or None)
-        project = get_object_or_404(Project, pk=project_id)
-        if form.is_valid():
-            applications = Application.objects.all()
-            for apps in applications:
-                if apps.name == form.cleaned_data.get("name"):
-                    context = {
-                        'project': project,
-                        'form': form,
-                        'error_message': 'You already added that application',
-                    }
-                    return render(request, 'project/create_application.html', context)
-            application = form.save(commit=False)
-            # User can only create projects that project's user is itself.
-            application.project = project
-            c = CheckList.objects.all()
-            cstr = ''
-            for a in c:
-                cstr = cstr+'0'
-            application.checklist = cstr
-            application.reported = cstr
-            application.save()
-            return render(request, 'project/project_detail.html', {'project': project})
-        context = {
-            'project': project,
-            'form': form,
-        }
-        return render(request, 'project/create_application.html', context)
+        if request.user.is_superuser:
+            form = ApplicationForm(request.POST or None)
+            project = get_object_or_404(Project, pk=project_id)
+            if form.is_valid():
+                applications = Application.objects.all()
+                for apps in applications:
+                    if apps.name == form.cleaned_data.get("name"):
+                        context = {
+                            'project': project,
+                            'form': form,
+                            'error_message': 'You already added that application',
+                        }
+                        return render(request, 'project/create_application.html', context)
+                application = form.save(commit=False)
+                # User can only create projects that project's user is itself.
+                application.project = project
+                c = CheckList.objects.all()
+                cstr = ''
+                for a in c:
+                    cstr = cstr+'0'
+                application.checklist = cstr
+                application.reported = cstr
+                application.save()
+                return render(request, 'project/project_detail.html', {'project': project})
+            context = {
+                'project': project,
+                'form': form,
+            }
+            return render(request, 'project/create_application.html', context)
+        else:
+            return render(request, 'project/index.html')
 
 #This is for deleting application.
 
 
 def delete_application(request, project_id, application_id):
-    project = get_object_or_404(Project, pk=project_id)
-    application = Application.objects.get(pk=application_id)
-    application.delete()
-    return render(request, 'project/project_detail.html', {'project': project})
-
+    if not request.user.is_authenticated:
+        return render(request, 'project/login.html')
+    else:
+        if request.user.is_superuser:
+            project = get_object_or_404(Project, pk=project_id)
+            application = Application.objects.get(pk=application_id)
+            application.delete()
+            return render(request, 'project/project_detail.html', {'project': project})
+        else:
+            return render(request, 'project/index.html')
 #This is for updating database when any of checkbox has changed.
 
 
