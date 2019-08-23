@@ -6,8 +6,7 @@ from django.db import models
 
 class Project(models.Model):
 
-    user = models.ForeignKey(
-        User, default=1, on_delete=models.SET_DEFAULT, related_name='user')
+    user = models.ForeignKey(User, default=1, on_delete=models.SET_DEFAULT, related_name='user')
     name = models.CharField(max_length=100)
     situation = models.CharField(max_length=10)
 
@@ -17,8 +16,7 @@ class Project(models.Model):
 
 class Application(models.Model):
 
-    project = models.ForeignKey(
-        Project, on_delete=models.CASCADE, related_name='project')
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project')
     name = models.CharField(max_length=100)
     access = models.CharField(max_length=100)
     username = models.CharField(max_length=30)
@@ -32,11 +30,14 @@ class Application(models.Model):
     def usernameInApp(userRequest):
         appList = []
         applications = Application.objects.all()
+
         for app in applications:
             userInApp = (app.username).split(',')
+
             for user in userInApp:
                 if user == userRequest.user.username:
                     appList.append(app)
+
         return appList
 
 
