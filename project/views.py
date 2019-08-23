@@ -238,8 +238,11 @@ def create_application(request, project_id):
                 application.checklist = checklist
                 application.reported = checklist
                 application.save()
-                
-                return render(request, 'project/project_detail.html', {'project': project})
+
+                applications = Application.objects.filter(
+                    project_id=project.id)
+
+                return render(request, 'project/project_detail.html', {'project': project, 'applications': applications})
             context = {
                 'project': project,
                 'form': form,
@@ -262,9 +265,14 @@ def delete_application(request, project_id, application_id):
             project = get_object_or_404(Project, pk=project_id)
             application = Application.objects.get(pk=application_id)
             application.delete()
-            return render(request, 'project/project_detail.html', {'project': project})
+
+            applications = Application.objects.filter(project_id=project.id)
+            return render(request, 'project/project_detail.html', {'project': project, 'applications': applications})
         else:
-            return render(request, 'project/index.html')
+            projects = Project.objects.all()
+            applications = Application.objects.all()
+
+            return render(request, 'project/index.html', {'projects': projects, 'applications': applications})
 #This is for updating database when any of checkbox has changed.
 
 
